@@ -170,7 +170,7 @@ def explore_numeric(df, x, figsize=(6,5) ):
 	Additionally, prints information on: 
 	- the # and % of null values
 	- number of unique values
-	- the most frequent category  and how much of the feature is this category (%)
+	- the most frequent value and how often frequent it is (%)
 	- A warning message if the feature is quasi-constant or constant feature
 							(if more than 99% of feature is a single value)
 
@@ -240,7 +240,8 @@ def explore_numeric(df, x, figsize=(6,5) ):
 
 def plot_numeric_vs_target(df, x, y='SalePrice',
                            figsize=(6,4), annotate=False ):
-	"""_summary_
+	"""Plots a seaborn regplot, with an optional formula annotation.
+	Also calcualtes correlation and displays Pearson's r in the title.
 
 	Args:
 		df (Frame): DataFrame with data.
