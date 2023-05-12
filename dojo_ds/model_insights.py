@@ -7,23 +7,24 @@ from sklearn import metrics
 ############################### FROM: INSIGHTS FOR STAKEHODLERS ############################
 ############################################################################################
 
-def summarize_df(df_):
-    """Source: Insights for Stakeholder Lesson - https://login.codingdojo.com/m/0/13079/91969 
-    Example Usage:
-    >> df = pd.read_csv(filename)
-    >> summary = summarize_df(df)
-    >> summary"""
-    df = df_.copy()
-    report = pd.DataFrame({
-                        'dtype':df.dtypes,
-                        '# null': df.isna().sum(),
-                        'null (%)': df.isna().sum()/len(df)*100,
-                        'nunique':df.nunique(),
-                        "min":df.min(),
-                        'max':df.max()
-             })
-    report.index.name='Column'
-    return report.reset_index()
+from .eda import summarize_df
+# def summarize_df(df_):
+#     """Source: Insights for Stakeholder Lesson - https://login.codingdojo.com/m/0/13079/91969 
+#     Example Usage:
+#     >> df = pd.read_csv(filename)
+#     >> summary = summarize_df(df)
+#     >> summary"""
+#     df = df_.copy()
+#     report = pd.DataFrame({
+#                         'dtype':df.dtypes,
+#                         '# null': df.isna().sum(),
+#                         'null (%)': df.isna().sum()/len(df)*100,
+#                         'nunique':df.nunique(),
+#                         "min":df.min(),
+#                         'max':df.max()
+#              })
+#     report.index.name='Column'
+#     return report.reset_index()
 
 ############################################################################################
 ############################### FROM: FEATURE IMPORTANCE ###################################

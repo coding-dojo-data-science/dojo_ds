@@ -10,7 +10,11 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.0', ]
+## Grab requirements form file
+with open("requirements.txt") as f:
+    req_list = f.readlines()
+
+requirements = ['Click>=7.0', *req_list  ]
 
 test_requirements = [ ]
 

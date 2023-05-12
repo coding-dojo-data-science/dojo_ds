@@ -7,5 +7,5 @@ __version__ = '0.1.1'
 from . import model_insights
 from . import data_enrichment
 from . import utils
-
+from . import eda
 from .dojo_ds import *
