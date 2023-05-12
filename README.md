@@ -6,17 +6,17 @@
     - `python3 -m pip install --upgrade build`
     - `python3 -m pip install --upgrade twine`
     - `python3 -m pip install --upgrade bump2version`
-    
+    > Note: try removing the `python3 -m` part of the commands above if you run into issues.
     
 - Deployment workflow:
     1. generate docs with `python docs/conf.py` (optional)
     2. Commit all changes.
     3. Increase version # with bump2version `bump2version patch` or `bump2version minor`
     4. Build distribution archives: `python -m build`
-    5. A) Upload to twine: ~~`twine upload dist/*`~~ [only if using general full-account credentials]
-    5. B) Upload to twine with an API token:
+    5. A) Upload to twine: `twine upload dist/*` [only if using general full-account credentials]
+    5. B) Upload to twine with an API token: [If using a token]
         - Use the `--repository` flag with the "server" name from $HOME/.pypirc
-        - `twine upload --repository cdds dist/*`
+        - `twine upload --repository dojo_ds dist/*`
     
 - [11/28/22 Update] Using project-based API token for upload
     - Follow the following guides to set up your own "$HOME/.pypirc" file with the API token: https://pypi.org/help/#apitoken
@@ -34,5 +34,6 @@ bump2version patch #or minor/major
 ### After install and bump2version, can run this block:
 ```bash
 python -m build 
-twine upload --repository cdds dist/*
+twine upload dist/*
 ```
+<!-- X twine upload --repository dojo_ds dist/* -->
