@@ -2,7 +2,7 @@
 
 __author__ = """James Irving"""
 __email__ = 'jirving@codingdojo.com'
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 from . import model_insights
 from . import data_enrichment
