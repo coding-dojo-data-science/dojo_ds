@@ -40,7 +40,8 @@ napoleon_google_docstring = True
 napoleon_include_private_with_doc = False
 napoleon_include_init_with_doc = True
 
-
+# From bs_ds's line 74
+add_module_name = False
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -165,6 +166,20 @@ texinfo_documents = [
      'One line description of project.',
      'Miscellaneous'),
 ]
+
+### FROM bs_ds's conf.py line 169
+def run_apidoc(_):
+    #https://www.sphinx-doc.org/en/master/man/sphinx-apidoc.html
+	from sphinx.ext.apidoc import main
+	import os
+	import sys
+	sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+	cur_dir = os.path.abspath(os.path.dirname(__file__))
+	module = os.path.join(cur_dir,"..","bs_ds")
+	main(['-o', cur_dir, module,'-M','--force'])
+
+def setup(app):
+	app.connect('builder-inited', run_apidoc)
 
 
 

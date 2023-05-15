@@ -266,14 +266,14 @@ def plot_numeric_vs_target(df, x, y='SalePrice',
 	## Add the title with the correlation
 	ax.set_title(f"{x} vs. {y} (r = {r})", fontweight='bold')
 
+	# Make sure the plot is shown before the print statement
+	plt.show()
+
 	## Print message with info on the count and % of null values
 	null_count = df[x].isna().sum()
-	if null_count > 0:
-		null_perc = null_count/len(df)* 100
+	null_perc = null_count/len(df)* 100
 	print(f"- NaN's Found: {null_count} ({round(null_perc,2)}%)")
-	
-	
-	
+
 	return fig, ax
 
 
