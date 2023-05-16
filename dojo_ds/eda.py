@@ -124,9 +124,6 @@ def plot_categorical_vs_target(df, x, y='SalePrice',fillna = True, placeholder =
 	"""
 	# Make a copy of the dataframe and fillna 
 	temp_df = df.copy()
-	# Save null values before imputing
-	null_count = temp_df[x].isna().sum()
-	null_perc = null_count/len(df)* 100
 
 	## fillna with placeholder
 	if fillna == True:
@@ -159,8 +156,7 @@ def plot_categorical_vs_target(df, x, y='SalePrice',fillna = True, placeholder =
 
 	# show fig and print
 	plt.show()
-	print(f"- NaN's Found: {null_count} ({round(null_perc,2)}%)")
-
+	
 	return fig, ax
 
 
@@ -268,11 +264,6 @@ def plot_numeric_vs_target(df, x, y='SalePrice',
 
 	# Make sure the plot is shown before the print statement
 	plt.show()
-
-	## Print message with info on the count and % of null values
-	null_count = df[x].isna().sum()
-	null_perc = null_count/len(df)* 100
-	print(f"- NaN's Found: {null_count} ({round(null_perc,2)}%)")
 
 	return fig, ax
 
