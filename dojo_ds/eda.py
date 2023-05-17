@@ -159,8 +159,6 @@ def plot_categorical_vs_target(df, x, y='SalePrice',fillna = True, placeholder =
 	
 	return fig, ax
 
-
-# TO DO: add the new print statements from explore_categorical
 def explore_numeric(df, x, figsize=(6,5) ):
 	"""Plots a Seaborn histplot on the top subplot and a horizontal boxplot on he bottom.
 	Additionally, prints information on: 
