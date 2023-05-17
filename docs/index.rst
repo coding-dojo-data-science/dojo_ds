@@ -8,7 +8,6 @@ Welcome to dojo-ds's documentation!
    readme
    installation
    usage
-   dojo_ds
    modules
    contributing
    authors
