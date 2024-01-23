@@ -144,7 +144,7 @@ def evaluate_classification(model, X_train=None, y_train=None, X_test=None, y_te
 		# Store results in a dataframe if ouput_frame is True
 		results_dict = {'train':results_train,
 						'test': results_test}
-	return results_dict
+		return results_dict
 
 
 def evaluate_classification_network(model, 
