@@ -9,7 +9,7 @@ from . import data_enrichment as data
 from . import eda 
 from . import evaluate
 from . import insights 
-from . import nlp_functions as nlp
+from . import nlp
 
 # from . import deployment_functions as deploy
 
