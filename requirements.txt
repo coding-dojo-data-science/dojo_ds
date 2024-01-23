@@ -4,3 +4,4 @@ matplotlib>=3.7.1
 seaborn>=0.12.2
 statsmodels>=0.13.5
 #plotly
+sphinx_rtd_theme
