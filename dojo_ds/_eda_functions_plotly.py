@@ -1,18 +1,19 @@
 ###### PLOTLY VERSIONS
-import plotly.express as px
-import plotly.io as pio
 
 def set_template(template='seaborn'):
+    import plotly.io as pio
     pio.templates.default=template
     
 
 def plotly_explore_numeric(df, x,width=1000, height=500):
+    import plotly.express as px
     fig = px.histogram(df,x=x,marginal='box',title=f'Distribution of {x}', 
                       width=width, height=height)
     return fig
 
 
 def plotly_explore_categorical(df, x ,width=1000, height=500):
+    import plotly.express as px
     fig = px.histogram(df,x=x,color=x,title=f'Distribution of {x}', 
                          width=width, height=height)
     return fig
@@ -24,7 +25,7 @@ def plotly_numeric_vs_target(df, x, y='SalePrice', trendline='ols',add_hoverdata
         hover_data = list(df.drop(columns=[x,y]).columns)
     else: 
         hover_data = None
-        
+    import plotly.express as px
     pfig = px.scatter(df, x=x, y=y,# template='plotly_dark', 
                      hover_data=hover_data,
                       trendline=trendline,
@@ -55,6 +56,7 @@ def plotly_numeric_vs_target(df, x, y='SalePrice', trendline='ols',add_hoverdata
 #     return fig
 
 def plotly_categorical_vs_target(df, x, y='SalePrice', histfunc='avg', width=800,height=500):
+    import plotly.express as px
     fig = px.histogram(df, x=x,y=y, color=x, width=width, height=height,
                        histfunc=histfunc, title=f'Compare {histfunc.title()} {y} by {x}')
     fig.update_layout(showlegend=False)
@@ -62,6 +64,8 @@ def plotly_categorical_vs_target(df, x, y='SalePrice', histfunc='avg', width=800
 
 
 def plotly_correlation(df, cmap='magma', cols=None):
+    import plotly.express as px
+
     if cols == None:
         cols = df.columns
     corr = df[cols].corr(numeric_only=True).round(2)

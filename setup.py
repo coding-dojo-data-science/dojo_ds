@@ -14,7 +14,7 @@ with open('HISTORY.rst') as history_file:
 # with open("requirements.txt") as f:
 #     req_list = f.readlines()
 #     req_LIST = [str(req) for req in req_list]
-req_list = ['scikit-learn==1.2.2','pandas==1.5.3','matplotlib==3.7.1', 'seaborn==0.12.2']
+req_list = ['scikit-learn>=1.2.2','pandas>=1.5.3','matplotlib>=3.7.1', 'seaborn>=0.12.2']#, 'plotly>=5.15.0']
 requirements = ['Click>=7.0', *req_list  ]
 
 test_requirements = [ ]
