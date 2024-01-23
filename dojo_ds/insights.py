@@ -5,7 +5,7 @@ import statsmodels.api as sm
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from IPython.display import display
+# from IPython.display import display
 
 
 def annotate_hbars(ax, ha='left',va='center',size=12,  xytext=(4,0),
