@@ -58,7 +58,7 @@ def explore_numeric(df, x, figsize=(6,5) ):
   # Boxplot on Bottom
   sns.boxplot(data=df, x=x, ax=axes[1])
   ## Adding a title
-  axes[0].set_title(f"Column: {x}", fontweight='bold')
+  axes[0].set_title(f"Column: {x}")#, fontweight='bold')
   ## Adjusting subplots to best fill Figure
   fig.tight_layout()
 
@@ -121,7 +121,7 @@ def explore_categorical(df, x, fillna = True, placeholder = 'MISSING',
 	ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
 
 	# Add. atitle with the feature name included
-	ax.set_title(f"Column: {x}", fontweight='bold')
+	ax.set_title(f"Column: {x}")#, fontweight='bold')
 
 	# Fix layout and show plot (before print statements)
 	fig.tight_layout()
@@ -217,7 +217,7 @@ def plot_categorical_vs_target(df, x, y,
 
   # Final Plot customization
   # Add a title
-  ax.set_title(f"{x} vs. {y}", fontweight='semibold')
+  ax.set_title(f"{x} vs. {y}")#, fontweight='semibold')
   fig.tight_layout()
   return fig, ax
 
@@ -261,7 +261,7 @@ def plot_numeric_vs_target(df, x, y, figsize=(6,4),
     scatter_kws={'ec':'white','lw':1,'alpha':0.8}
     sns.regplot(data=temp_df, x=x, y=y, ax=axes, scatter_kws=scatter_kws, **kwargs) # Included the new argument within the sns.regplot function
     ## Add the title with the correlation
-    axes.set_title(f"{x} vs. {y} (r = {r})", fontweight='bold')
+    axes.set_title(f"{x} vs. {y} (r = {r})")#, fontweight='bold')
 
 
   elif 'class' in target_type:
