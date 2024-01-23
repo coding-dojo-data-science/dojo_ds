@@ -1,7 +1,14 @@
-import matplotlib.pyplot as plt
-import statsmodels.api as sm
-
+from .evaluate import evaluate_ols, plot_residuals
 def find_outliers_Z(data, verbose=True):
+    """Find outliers based on Z-score rule (outliers have an absolute z-score that is >3)
+
+    Args:
+        data (Series): Pandas Series
+        verbose (bool, optional): Print summary info about outliers. Defaults to True.
+
+    Returns:
+        Series: Boolean index for input data, where True = Outlier
+    """
     import pandas as pd
     import numpy as np
     import scipy.stats as stats
@@ -17,6 +24,25 @@ def find_outliers_Z(data, verbose=True):
 
 
 def find_outliers_IQR(data, verbose=True):
+    """Find outliers based on IQR-rule (outliers are either 1.5 x IQR below 25% quantile and 1.5xIQR above 75% quantile.
+    
+    # Calculate q1 and q3 quantiles
+    q3 = np.quantile(data,.75)
+    q1 = np.quantile(data,.25)
+    # Calculate IQR 
+    IQR = q3 - q1
+    
+    # Set thresholds more than 1.5x IQR above Q3/below Q1
+    upper_threshold = q3 + 1.5*IQR
+    lower_threshold = q1 - 1.5*IQR
+    
+    Args:
+        data (Series): Pandas Series
+        verbose (bool, optional): Print summary info about outliers. Defaults to True.
+
+    Returns:
+        Series: Boolean index for input data, where True = Outlier
+    """
     import pandas as pd
     import numpy as np
     q3 = np.quantile(data,.75)
@@ -79,8 +105,6 @@ def remove_outliers(df_,method='iqr', subset=None, verbose=2):
         raise Exception("[!] subset must be None, a single string, or a list of strings.")
 
     
-
-    
     ## Empty dict for both types of outliers
     outliers = {}
 
@@ -102,54 +126,3 @@ def remove_outliers(df_,method='iqr', subset=None, verbose=2):
     df_clean = df[~outliers_combined].copy()
     return df_clean
       
-    
-    
-# def evaluate_ols(result,X_train_df, y_train, show_summary=True):
-#     """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
-#     """
-#     import matplotlib.pyplot as plt
-#     import statsmodels.api as sm
-#     try:
-#         display(result.summary())
-#     except:
-#         pass
-    
-#     ## save residuals from result
-#     y_pred = result.predict(X_train_df)
-#     resid = y_train - y_pred
-    
-#     fig, axes = plt.subplots(ncols=2,figsize=(12,5))
-    
-#     ## Normality 
-#     sm.graphics.qqplot(resid,line='45',fit=True,ax=axes[0]);
-    
-#     ## Homoscedasticity
-#     ax = axes[1]
-#     ax.scatter(y_pred, resid, edgecolor='white',lw=1)
-#     ax.axhline(0,zorder=0)
-#     ax.set(ylabel='Residuals',xlabel='Predicted Value');
-#     plt.tight_layout()
-    
-    
-    
-# def plot_residuals(model,X_test_df, y_test,figsize=(12,5)):
-#     """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
-    
-#     """
-#     ## Make predictions and calculate residuals
-#     y_pred = model.predict(X_test_df)
-#     resid = y_test - y_pred
-    
-#     fig, axes = plt.subplots(ncols=2,figsize=figsize)
-    
-#     ## Normality 
-#     sm.graphics.qqplot(resid, line='45',fit=True,ax=axes[0]);
-    
-#     ## Homoscedascity
-#     ax = axes[1]
-#     ax.scatter(y_pred, resid, edgecolor='white',lw=0.5)
-#     ax.axhline(0,zorder=0)
-#     ax.set(ylabel='Residuals',xlabel='Predicted Value');
-#     plt.tight_layout()
-
-from .evaluate import evaluate_ols, plot_residuals
