@@ -6,8 +6,8 @@
 import unittest
 from click.testing import CliRunner
 
-from dojo_ds import dojo_ds
-from dojo_ds import cli
+from dojo_ds_2023 import dojo_ds
+from dojo_ds_2023 import cli
 
 
 class TestDojo_ds(unittest.TestCase):
