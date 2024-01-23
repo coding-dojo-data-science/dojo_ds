@@ -1,8 +1,7 @@
-# def explore_categorical_check_constant(df, x, fillna = True, placeholder = 'MISSING',
+import matplotlib.pyplot as plt
 import seaborn as sns
-import matplotlib.pyplot as plt 
-import pandas as pd
 
+####### PREVIOUS (slightly updated to only reuturn fig)
 
 def summarize_df(df_):
     """Source: Insights for Stakeholder Lesson - https://login.codingdojo.com/m/0/13079/91969 
@@ -10,6 +9,7 @@ def summarize_df(df_):
     >> df = pd.read_csv(filename)
     >> summary = summarize_df(df)
     >> summary"""
+    import pandas as pd
     df = df_.copy()
     report = pd.DataFrame({
                         'dtype':df.dtypes,
@@ -21,6 +21,56 @@ def summarize_df(df_):
              })
     report.index.name='Column'
     return report.reset_index()
+  
+  
+  
+def explore_numeric(df, x, figsize=(6,5) ):
+  """Plots a Seaborn histplot on the top subplot and a horizontal boxplot on he bottom.
+	Additionally, prints information on: 
+	- the # and % of null values
+	- number of unique values
+	- the most frequent value and how often frequent it is (%)
+	- A warning message if the feature is quasi-constant or constant feature
+							(if more than 99% of feature is a single value)
+
+	Args:
+		df (Frame): DataFrame that contains column x
+		x (str): a column name 
+		fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
+		placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
+		figsize (tuple, optional): Figure size (width, height). Defaults to (6,5).
+		order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
+								Note: any category not in the order list will not be shown on the graph.
+								    If a category is included in the order list that isn't in the data, 
+									it will be added as an empty bar categories can be removed from the visuals 
+
+	Returns:
+		fig: Matplotlib Figure
+		ax: Matplotlib Axes
+	
+  Source: https://login.codingdojo.com/m/606/13765/117605"""
+  # Making our figure with gridspec for subplots
+  gridspec = {'height_ratios':[0.7,0.3]}
+  fig, axes = plt.subplots(nrows=2, figsize=figsize,
+                           sharex=True, gridspec_kw=gridspec)
+  # Histogram on Top
+  sns.histplot(data=df, x=x, ax=axes[0])
+  # Boxplot on Bottom
+  sns.boxplot(data=df, x=x, ax=axes[1])
+  ## Adding a title
+  axes[0].set_title(f"Column: {x}", fontweight='bold')
+  ## Adjusting subplots to best fill Figure
+  fig.tight_layout()
+
+  # Ensure plot is shown before message
+  plt.show()
+  ## Print message with info on the count and % of null values
+  null_count = df[x].isna().sum()
+  null_perc = null_count/len(df)* 100
+  print(f"- NaN's Found: {null_count} ({round(null_perc,2)}%)")
+  return fig, axes
+
+
 
 
 def explore_categorical(df, x, fillna = True, placeholder = 'MISSING',
@@ -101,10 +151,15 @@ def explore_categorical(df, x, fillna = True, placeholder = 'MISSING',
 
 
 
-
-def plot_categorical_vs_target(df, x, y='SalePrice',fillna = True, placeholder = 'MISSING',
-			       figsize=(6,4), order = None):
-	"""Plots a combination seaborn barplot (without error bars) and a stripplot.
+def plot_categorical_vs_target(df, x, y,
+                                   target_type='reg',
+                                   figsize=(6,4),
+                                   fillna = True, placeholder = 'MISSING',
+                                   order = None,
+                                   ):
+  """Updated Version of the function which accepts either numeric or categorical targets.
+  Adapted from Source: https://login.codingdojo.com/m/606/13765/117606
+  Plots a combination seaborn barplot (without error bars) and a stripplot.
 
 	Args:
 		df (Frame): DataFrame containing data to plot.
@@ -122,119 +177,59 @@ def plot_categorical_vs_target(df, x, y='SalePrice',fillna = True, placeholder =
 		fig: Matplotlib Figure
 		ax: Matplotlib Axes
 	"""
-	# Make a copy of the dataframe and fillna 
-	temp_df = df.copy()
+ 
+  # Make a copy of the dataframe and fillna
+  temp_df = df.copy()
+  # fillna with placeholder
+  if fillna == True:
+    temp_df[x] = temp_df[x].fillna(placeholder)
 
-	## fillna with placeholder
-	if fillna == True:
-		temp_df[x] = temp_df[x].fillna(placeholder)
-
-	# or drop nulls prevent unwanted 'nan' group in stripplot
-	else:
-		temp_df = temp_df.dropna(subset=[x]) 
-
-
-	## Create the figure and subplots
-	fig, ax = plt.subplots(figsize=figsize)
-
-	# Barplot 
-	sns.barplot(data=temp_df, x=x, y=y, ax=ax, order=order, alpha=0.6,
-				linewidth=1, edgecolor='black', errorbar=None)
-
-	# Boxplot
-	sns.stripplot(data=temp_df, x=x, y=y, hue=x, ax=ax, 
-				order=order, hue_order=order, legend=False,
-				edgecolor='white', linewidth=0.5,
-				size=3,zorder=0)
-
-	# Rotate xlabels
-	ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-
-	# Add a title
-	ax.set_title(f"{x} vs. {y}", fontweight='bold')
-	fig.tight_layout()
-
-	# show fig and print
-	plt.show()
-	
-	return fig, ax
-
-def explore_numeric(df, x, figsize=(6,5) ):
-	"""Plots a Seaborn histplot on the top subplot and a horizontal boxplot on he bottom.
-	Additionally, prints information on: 
-	- the # and % of null values
-	- number of unique values
-	- the most frequent value and how often frequent it is (%)
-	- A warning message if the feature is quasi-constant or constant feature
-							(if more than 99% of feature is a single value)
-
-	Args:
-		df (Frame): DataFrame that contains column x
-		x (str): a column name 
-		fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
-		placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
-		figsize (tuple, optional): Figure size (width, height). Defaults to (6,5).
-		order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
-								Note: any category not in the order list will not be shown on the graph.
-								    If a category is included in the order list that isn't in the data, 
-									it will be added as an empty bar categories can be removed from the visuals 
-
-	Returns:
-		fig: Matplotlib Figure
-		ax: Matplotlib Axes
-	"""
-
-	## Save null value counts and percent for printing 
-	null_count = df[x].isna().sum()
-	null_perc = null_count/len(df)* 100
+  # or drop nulls prevent unwanted 'nan' group in stripplot
+  else:
+    temp_df = temp_df.dropna(subset=[x])
 
 
-	## Making our figure with gridspec for subplots
-	gridspec = {'height_ratios':[0.7,0.3]}
-	fig, axes = plt.subplots(nrows=2, figsize=figsize,
-							sharex=True, gridspec_kw=gridspec)
-	# Histogram on Top
-	sns.histplot(data=df, x=x, ax=axes[0])
+  # Create the figure and subplots
+  fig, ax = plt.subplots(figsize=figsize)
 
-	# Boxplot on Bottom
-	sns.boxplot(data=df, x=x, ax=axes[1])
+  ## If a regression target:
+  if 'reg' in target_type:
 
-	## Adding a title
-	axes[0].set_title(f"Column: {x}", fontweight='bold')
+      # Barplot
+    sns.barplot(data=temp_df, x=x, y=y, ax=ax, order=order, alpha=0.6,
+                linewidth=1, edgecolor='black', errorbar=None)
 
-	## Adjusting subplots to best fill Figure
-	fig.tight_layout()
-
-	# Ensure plot is shown before message
-	plt.show()
-
-
-	# Print null value info
-	print(f"- NaN's Found: {null_count} ({round(null_perc,2)}%)")
-	# Print cardinality info
-	nunique = df[x].nunique()
-	print(f"- Unique Values: {nunique}")
+    # Boxplot
+    sns.stripplot(data=temp_df, x=x, y=y, hue=x, ax=ax,
+                  order=order, hue_order=order, legend=False,
+                  edgecolor='white', linewidth=0.5,
+                  size=3,zorder=0)
+    # Rotate xlabels
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
 
 
-	# Get the most most common value, its count as # and as %
-	most_common_val_count = df[x].value_counts(dropna=False).head(1)
+  # If a classification target:
+  elif 'class' in target_type:
+   sns.histplot(data=df, hue=y, x=x,hue_order=order,
+                  stat='percent', multiple='fill',ax=ax)
+  else:
+    raise Exception("target_type must be one either 'class' or 'reg'")
 
-	most_common_val = most_common_val_count.index[0]
-	freq = most_common_val_count.values[0]
-	perc_most_common = freq / len(df) * 100
-
-	print(f"- Most common value: '{most_common_val}' occurs {freq} times ({round(perc_most_common,2)}%)")
-
-	# print message if quasi-constant or constant (most common val more than 98% of data)
-	if perc_most_common > 98:
-		print(f"\n- [!] Warning: '{x}' is a constant or quasi-constant feature and should be dropped.")
-
-	return fig, axes
+  # Final Plot customization
+  # Add a title
+  ax.set_title(f"{x} vs. {y}", fontweight='semibold')
+  fig.tight_layout()
+  return fig, ax
 
 
-def plot_numeric_vs_target(df, x, y='SalePrice',
-                           figsize=(6,4), annotate=False ):
-	"""Plots a seaborn regplot, with an optional formula annotation.
+
+def plot_numeric_vs_target(df, x, y, figsize=(6,4),
+                           target_type='reg', errorbar='ci',
+                           estimator='mean', order=None,
+                           **kwargs): # kwargs for sns.regplot
+  """UPDATED FUNCTION WITH OPTION FOR WHICH TYPE OF TARGET
+  Source: https://login.codingdojo.com/m/606/13765/117605
+  Plots a seaborn regplot, with an optional formula annotation.
 	Also calcualtes correlation and displays Pearson's r in the title.
 
 	Args:
@@ -247,24 +242,72 @@ def plot_numeric_vs_target(df, x, y='SalePrice',
 	Returns:
 		fig: Matplotlib Figure
 		ax: Matplotlib Axes
-	"""
-	# Calculate the correlation
-	corr = df[[x,y]].corr().round(2)
-	r = corr.loc[x,y]
+  """
 
-	# Plot the data
-	fig, ax = plt.subplots(figsize=figsize)
-	scatter_kws={'ec':'white','lw':1,'alpha':0.8}
-	sns.regplot(data=df, x=x, y=y, ax=ax, scatter_kws=scatter_kws)
+  nulls = df[[x,y]].isna().sum()
+  if nulls.sum()>0:
+    print(f"- Excluding {nulls.sum()} NaN's")
+    # print(nulls)
+    temp_df = df.dropna(subset=[x,y,])
+  else:
+    temp_df = df
 
-	## Add the title with the correlation
-	ax.set_title(f"{x} vs. {y} (r = {r})", fontweight='bold')
+  if 'reg' in target_type:
+    fig, axes = plt.subplots(figsize=figsize)
+    # Calculate the correlation
+    corr = df[[x,y]].corr().round(2)
+    r = corr.loc[x,y]
+    # Plot the data
+    scatter_kws={'ec':'white','lw':1,'alpha':0.8}
+    sns.regplot(data=temp_df, x=x, y=y, ax=axes, scatter_kws=scatter_kws, **kwargs) # Included the new argument within the sns.regplot function
+    ## Add the title with the correlation
+    axes.set_title(f"{x} vs. {y} (r = {r})", fontweight='bold')
 
-	# Make sure the plot is shown before the print statement
-	plt.show()
 
-	return fig, ax
+  elif 'class' in target_type:
+    fig, axes = plt.subplots(figsize=figsize, ncols=2)
 
+    # Left Subplot (barplot)
+    sns.barplot(data=temp_df, x=y, y=x,  order=order, estimator=estimator,
+                errorbar=errorbar, ax=axes[0],)
+
+    ## Right subplot (boxplot+stripplot)
+    # Stripplot
+    sns.stripplot(data=temp_df, x=y, y=x, hue=y, ax=axes[1],
+                order=order, hue_order=order, legend=False,
+                edgecolor='white', linewidth=0.5,
+                size=3,zorder=0)
+
+    # Boxplot
+    transparent = {'alpha':.6} #Props for boxplot
+    sns.boxplot(data=temp_df, x=y, y=x,
+                boxprops=transparent, whiskerprops=transparent,
+                width=.25, showfliers=False,
+                saturation=0.5,
+                ax=axes[1])
+    # Add title
+    fig.suptitle(f"{x} vs. {y}")
+
+  # Make sure the plot is shown before the print statement
+  fig.tight_layout()
+  fig.show()
+  return fig, axes
+
+
+
+######### NEW
+def plot_correlation(df, cmap='coolwarm', cols=None):
+    if cols == None:
+        cols = df.columns
+    corr = df[cols].corr(numeric_only=True)
+
+    fig, ax = plt.subplots(figsize=(8,6))
+    sns.heatmap(corr, cmap=cmap, ax=ax, annot=True, center=0)
+    ax.set_title("Correlation Matrix")
+    return fig
+
+
+from ._eda_functions_plotly import *
 
 
 

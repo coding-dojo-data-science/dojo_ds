@@ -1,8 +1,5 @@
 """Main module."""
 
-	
-"""Functions for inspecting objects, classes, and files"""
-
 
 
 

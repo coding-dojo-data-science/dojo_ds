@@ -104,52 +104,51 @@ def remove_outliers(df_,method='iqr', subset=None, verbose=2):
       
     
     
-# def evaluate_ols(result,X_train_df, y_train, show_summary=True):
-#     """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
-#     """
-#     import matplotlib.pyplot as plt
-#     import statsmodels.api as sm
-#     try:
-#         display(result.summary())
-#     except:
-#         pass
+def evaluate_ols(result,X_train_df, y_train, show_summary=True):
+    """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
+    """
+    import matplotlib.pyplot as plt
+    import statsmodels.api as sm
+    try:
+        display(result.summary())
+    except:
+        pass
     
-#     ## save residuals from result
-#     y_pred = result.predict(X_train_df)
-#     resid = y_train - y_pred
+    ## save residuals from result
+    y_pred = result.predict(X_train_df)
+    resid = y_train - y_pred
     
-#     fig, axes = plt.subplots(ncols=2,figsize=(12,5))
+    fig, axes = plt.subplots(ncols=2,figsize=(12,5))
     
-#     ## Normality 
-#     sm.graphics.qqplot(resid,line='45',fit=True,ax=axes[0]);
+    ## Normality 
+    sm.graphics.qqplot(resid,line='45',fit=True,ax=axes[0]);
     
-#     ## Homoscedasticity
-#     ax = axes[1]
-#     ax.scatter(y_pred, resid, edgecolor='white',lw=1)
-#     ax.axhline(0,zorder=0)
-#     ax.set(ylabel='Residuals',xlabel='Predicted Value');
-#     plt.tight_layout()
+    ## Homoscedasticity
+    ax = axes[1]
+    ax.scatter(y_pred, resid, edgecolor='white',lw=1)
+    ax.axhline(0,zorder=0)
+    ax.set(ylabel='Residuals',xlabel='Predicted Value');
+    plt.tight_layout()
     
     
     
-# def plot_residuals(model,X_test_df, y_test,figsize=(12,5)):
-#     """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
+def plot_residuals(model,X_test_df, y_test,figsize=(12,5)):
+    """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
     
-#     """
-#     ## Make predictions and calculate residuals
-#     y_pred = model.predict(X_test_df)
-#     resid = y_test - y_pred
+    """
+    ## Make predictions and calculate residuals
+    y_pred = model.predict(X_test_df)
+    resid = y_test - y_pred
     
-#     fig, axes = plt.subplots(ncols=2,figsize=figsize)
+    fig, axes = plt.subplots(ncols=2,figsize=figsize)
     
-#     ## Normality 
-#     sm.graphics.qqplot(resid, line='45',fit=True,ax=axes[0]);
+    ## Normality 
+    sm.graphics.qqplot(resid, line='45',fit=True,ax=axes[0]);
     
-#     ## Homoscedascity
-#     ax = axes[1]
-#     ax.scatter(y_pred, resid, edgecolor='white',lw=0.5)
-#     ax.axhline(0,zorder=0)
-#     ax.set(ylabel='Residuals',xlabel='Predicted Value');
-#     plt.tight_layout()
-
-from .evaluate import evaluate_ols, plot_residuals
+    ## Homoscedascity
+    ax = axes[1]
+    ax.scatter(y_pred, resid, edgecolor='white',lw=0.5)
+    ax.axhline(0,zorder=0)
+    ax.set(ylabel='Residuals',xlabel='Predicted Value');
+    plt.tight_layout()
+    
