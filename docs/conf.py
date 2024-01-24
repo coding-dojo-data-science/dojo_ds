@@ -112,8 +112,8 @@ html_theme_options = {
     'collapse_navigation': True,
     'sticky_navigation': True,
     'navigation_depth': 4,
-    'includehidden': False,
-    'titles_only': False
+    # 'includehidden': False,
+    # 'titles_only': False
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
