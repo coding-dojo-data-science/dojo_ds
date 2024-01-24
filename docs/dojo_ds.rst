@@ -25,10 +25,10 @@ dojo\_ds.data\_enrichment module
    :undoc-members:
    :show-inheritance:
 
-dojo\_ds.dojo\_ds module
-------------------------
+dojo\_ds.deploy module
+----------------------
 
-.. automodule:: dojo_ds.dojo_ds
+.. automodule:: dojo_ds.deploy
    :members:
    :undoc-members:
    :show-inheritance:
@@ -41,26 +41,42 @@ dojo\_ds.eda module
    :undoc-members:
    :show-inheritance:
 
-dojo\_ds.lp\_style module
--------------------------
+dojo\_ds.evaluate module
+------------------------
 
-.. automodule:: dojo_ds.lp_style
+.. automodule:: dojo_ds.evaluate
    :members:
    :undoc-members:
    :show-inheritance:
 
-dojo\_ds.model\_insights module
--------------------------------
+dojo\_ds.imports module
+-----------------------
 
-.. automodule:: dojo_ds.model_insights
+.. automodule:: dojo_ds.imports
    :members:
    :undoc-members:
    :show-inheritance:
 
-dojo\_ds.standard\_imports module
+dojo\_ds.insights module
+------------------------
+
+.. automodule:: dojo_ds.insights
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+dojo\_ds.matplotlib\_style module
 ---------------------------------
 
-.. automodule:: dojo_ds.standard_imports
+.. automodule:: dojo_ds.matplotlib_style
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+dojo\_ds.nlp module
+-------------------
+
+.. automodule:: dojo_ds.nlp
    :members:
    :undoc-members:
    :show-inheritance:

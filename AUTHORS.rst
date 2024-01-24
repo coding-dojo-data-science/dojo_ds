@@ -5,9 +5,9 @@ Credits
 Development Lead
 ----------------
 
-* James Irving <jirving@codingdojo.com>
+* James Irving, Ph.D. <james.irving.phd@gmail.com>
+
 
 Contributors
 ------------
-
-None yet. Why not be the first?
+* Brenda Hungerford, Ph.D. <bhungerford@codingdojo.com>

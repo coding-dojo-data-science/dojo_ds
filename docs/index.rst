@@ -2,21 +2,22 @@ Welcome to dojo-ds's documentation!
 ======================================
 
 .. toctree::
-   :maxdepth: 3
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Contents (Overview):
 
-   readme
    installation
    usage
    contributing
    authors
-   history
+
+..    readme
+..    history
    
 .. toctree::
-   :maxdepth: 4
-   :caption: Contents:
+   :maxdepth: 2
+   :caption: Documentation:
 
-   modules
+   dojo_ds
 
 Indices and tables
 ==================
