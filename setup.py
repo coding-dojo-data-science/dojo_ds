@@ -29,9 +29,10 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        
     ],
     description="Code from Coding Dojo's Online Part-Time Data Science boot camp",
     entry_points={
@@ -48,7 +49,7 @@ setup(
     packages=find_packages(include=['dojo_ds', 'dojo_ds.*']),
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/jirvingphd/dojo_ds',
+    url='https://github.com/coding-dojo-data-science/dojo_ds',
     version='1.0.5',
     zip_safe=False,
 )
