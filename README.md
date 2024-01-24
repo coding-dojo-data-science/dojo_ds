@@ -49,12 +49,30 @@ twine upload dist/*
 ## Updating the Documentation
 
 - The readthedocs site for this package is created using sphinx and autodoc.
+- Whenever the repo is updated, the docs are re-built using the settings in `.readthedocs.yml`:
+	```yml
+	# Build documentation in the docs/ directory with Sphinx
+	sphinx:
+		configuration: docs/conf.py
+
+	# If using Sphinx, optionally build your docs in additional formats such as PDF
+	# formats:
+	#    - pdf
+
+	# Optionally declare the Python requirements required to build your docs
+	python:
+		install:
+		- requirements: requirements.txt #requirements-detected.txt
+	```
 	
+- To make the docs locally in the same way as they will be for readthedocs:
+	-  Use `make html` command, which will invoke the same `configuration`` file as readthedocs
+
 ### Summary of Workflow (WIP):
-Normally, this process is done by readthedocs.org as it builds the documentation, but we can 
+Normally, this process is done by readthedocs.org as it builds the documentation, but we can be run manually:
 
-> Commands to generate documentation:
 
+- Commands to generate documentation:
 
 ```bash
 cd docs
@@ -62,14 +80,29 @@ make html
 ```
 
 
-1. Running `make html` command uses Sphinx to generate documentation.
-	- Command runs `make.bat`, which references `Makefile`
-	- Sphinx uses `conf.py`'s settings (and functions at bottom of file) to run autodocumentation creation.
-	- This creates several .rst files in the `docs` folder. 
-		- e.g. dojo_ds.rst, 
-		-  some of these are created based on .rst files in the main directory of this repo. 
-			- AUTHORS.rst, CONTRIBUTING.rst, HISTORY.rst, README.rst
-	- Which are then converted in html files (Final html files are in `docs/build/html/`)
+* Running `make html` command uses Sphinx to generate documentation.
+	- Command runs `make.bat`, which references `Makefile` to create the documentation based on the contents of the `docs` folder.
+- Sphinx uses `docs/conf.py`'s settings (and 2 functions addd at bottom of file) to run doc creation.
+- Sphinx uses  .rst files in the `docs` folder, many of these just reference the all-caps files in the main directory of the repo. 
+	- AUTHORS.rst, CONTRIBUTING.rst, HISTORY.rst, README.rst
+
+
+* Files to Edit:
+	- `docs/index.rst`: Primary file for controlling documentation homepage layout
+	- `docs/conf.py`:
+		- theme, api doc settings, etc.
+	- `./AUTHORS/CONTRIBUTING.rst/etc.`
+		- Modify to change contents of generated documentation.
+
+- Final Output Folder for build is  `docs/build/html/`, which is set by `docs/Makefile`'s vars
+
+```makefile
+SPHINXOPTS    = 
+SPHINXBUILD   = python -msphinx
+SPHINXPROJ    = dojo_ds
+SOURCEDIR     = .
+BUILDDIR      = build
+```
 
 	
 
