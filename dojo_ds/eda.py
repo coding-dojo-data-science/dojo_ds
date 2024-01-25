@@ -24,7 +24,7 @@ def summarize_df(df_):
   
   
   
-def explore_numeric(df, x, figsize=(6,5) ):
+def explore_numeric(df, x, figsize=(6,5), show=True):
   """Plots a Seaborn histplot on the top subplot and a horizontal boxplot on he bottom.
     Additionally, prints information on: 
     - the # and % of null values
@@ -63,7 +63,9 @@ def explore_numeric(df, x, figsize=(6,5) ):
   fig.tight_layout()
 
   # Ensure plot is shown before message
-  plt.show()
+  if show:
+      plt.show()
+   
   ## Print message with info on the count and % of null values
   null_count = df[x].isna().sum()
   null_perc = null_count/len(df)* 100
@@ -74,7 +76,7 @@ def explore_numeric(df, x, figsize=(6,5) ):
 
 
 def explore_categorical(df, x, fillna = True, placeholder = 'MISSING',
-                        figsize = (6,4), order = None):
+                        figsize = (6,4), order = None, show=True):
     """Plots a seaborn countplot of for x column and prints information on:
     - the # and % of null values
     - number of unique values
@@ -120,12 +122,13 @@ def explore_categorical(df, x, fillna = True, placeholder = 'MISSING',
     # Rotate Tick Labels for long names
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
 
-    # Add. atitle with the feature name included
+    # Add. title with the feature name included
     ax.set_title(f"Column: {x}")#, fontweight='bold')
 
     # Fix layout and show plot (before print statements)
     fig.tight_layout()
-    plt.show()
+    if show:
+        plt.show()
 
 
     # Print null value info
@@ -155,7 +158,7 @@ def plot_categorical_vs_target(df, x, y,
                                    target_type='reg',
                                    figsize=(6,4),
                                    fillna = True, placeholder = 'MISSING',
-                                   order = None,
+                                   order = None, show=True
                                    ):
   """Updated Version of the function which accepts either numeric or categorical targets.
   Adapted from Source: https://login.codingdojo.com/m/606/13765/117606
@@ -219,18 +222,20 @@ def plot_categorical_vs_target(df, x, y,
   # Add a title
   ax.set_title(f"{x} vs. {y}")#, fontweight='semibold')
   fig.tight_layout()
+  if show==True:
+      plt.show()
   return fig, ax
 
 
 
 def plot_numeric_vs_target(df, x, y, figsize=(6,4),
                            target_type='reg', errorbar='ci',
-                           estimator='mean', order=None,
+                           estimator='mean', order=None,show=True,
                            **kwargs): # kwargs for sns.regplot
   """UPDATED FUNCTION WITH OPTION FOR WHICH TYPE OF TARGET
   Source: https://login.codingdojo.com/m/606/13765/117605
   Plots a seaborn regplot, with an optional formula annotation.
-    Also calcualtes correlation and displays Pearson's r in the title.
+    Also calculates correlation and displays Pearson's r in the title.
 
     Args:
         df (Frame): DataFrame with data.
@@ -290,7 +295,8 @@ def plot_numeric_vs_target(df, x, y, figsize=(6,4),
 
   # Make sure the plot is shown before the print statement
   fig.tight_layout()
-  fig.show()
+  if show==True:
+      plt.show()
   return fig, axes
 
 
