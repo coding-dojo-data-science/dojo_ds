@@ -50,6 +50,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/coding-dojo-data-science/dojo_ds',
-    version='1.0.7',
+    version='1.0.8',
     zip_safe=False,
 )
