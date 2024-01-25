@@ -127,7 +127,7 @@ def evaluate_classification(model, X_train=None, y_train=None, X_test=None, y_te
         # Get predictions for training data
         y_train_pred = model.predict(X_train)
         # Call the helper function to obtain regression metrics for training data
-        results_train = classification_metrics(y_train, y_train_pred, cmap=cmap_train, label='Training Data', **shared_kwargs)
+        results_train = classification_metrics(y_train, y_train_pred, cmap=cmap_train, figsize=figsize,label='Training Data', **shared_kwargs)
         print()
     else:
         results_train=None
@@ -136,7 +136,7 @@ def evaluate_classification(model, X_train=None, y_train=None, X_test=None, y_te
         # Get predictions for test data
         y_test_pred = model.predict(X_test)
         # Call the helper function to obtain regression metrics for test data
-        results_test = classification_metrics(y_test, y_test_pred,  cmap=cmap_test, label='Test Data' , **shared_kwargs)
+        results_test = classification_metrics(y_test, y_test_pred,  cmap=cmap_test, figsize=figsize,label='Test Data' , **shared_kwargs)
     else:
         results_test = None
   
