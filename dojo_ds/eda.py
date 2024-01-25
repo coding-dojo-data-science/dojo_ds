@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-####### PREVIOUS (slightly updated to only reuturn fig)
+####### PREVIOUS (slightly updated to only return fig)
 
 def summarize_df(df_):
     """Source: Insights for Stakeholder Lesson - https://login.codingdojo.com/m/0/13079/91969 
@@ -26,28 +26,28 @@ def summarize_df(df_):
   
 def explore_numeric(df, x, figsize=(6,5) ):
   """Plots a Seaborn histplot on the top subplot and a horizontal boxplot on he bottom.
-	Additionally, prints information on: 
-	- the # and % of null values
-	- number of unique values
-	- the most frequent value and how often frequent it is (%)
-	- A warning message if the feature is quasi-constant or constant feature
-							(if more than 99% of feature is a single value)
+    Additionally, prints information on: 
+    - the # and % of null values
+    - number of unique values
+    - the most frequent value and how often frequent it is (%)
+    - A warning message if the feature is quasi-constant or constant feature
+                            (if more than 99% of feature is a single value)
 
-	Args:
-		df (Frame): DataFrame that contains column x
-		x (str): a column name 
-		fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
-		placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
-		figsize (tuple, optional): Figure size (width, height). Defaults to (6,5).
-		order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
-								Note: any category not in the order list will not be shown on the graph.
-								    If a category is included in the order list that isn't in the data, 
-									it will be added as an empty bar categories can be removed from the visuals 
+    Args:
+        df (Frame): DataFrame that contains column x
+        x (str): a column name 
+        fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
+        placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
+        figsize (tuple, optional): Figure size (width, height). Defaults to (6,5).
+        order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
+                                Note: any category not in the order list will not be shown on the graph.
+                                    If a category is included in the order list that isn't in the data, 
+                                    it will be added as an empty bar categories can be removed from the visuals 
 
-	Returns:
-		fig: Matplotlib Figure
-		ax: Matplotlib Axes
-	
+    Returns:
+        fig: Matplotlib Figure
+        ax: Matplotlib Axes
+    
   Source: https://login.codingdojo.com/m/606/13765/117605"""
   # Making our figure with gridspec for subplots
   gridspec = {'height_ratios':[0.7,0.3]}
@@ -75,79 +75,79 @@ def explore_numeric(df, x, figsize=(6,5) ):
 
 def explore_categorical(df, x, fillna = True, placeholder = 'MISSING',
                         figsize = (6,4), order = None):
-	"""Plots a seaborn countplot of for x column and prints information on:
-	- the # and % of null values
-	- number of unique values
-	- the most frequent category  and how much of the feature is this category (%)
-	- A warning message if the feature is quasi-constant or constant feature
-							(if more than 99% of feature is a single value)
+    """Plots a seaborn countplot of for x column and prints information on:
+    - the # and % of null values
+    - number of unique values
+    - the most frequent category  and how much of the feature is this category (%)
+    - A warning message if the feature is quasi-constant or constant feature
+                            (if more than 99% of feature is a single value)
 
-	Args:
-		df (Frame): DataFrame that contains column x
-		x (str): a column name 
-		fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
-		placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
-		figsize (tuple, optional): Figure size (width, height). Defaults to (6,4).
-		order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
-								Note: any category not in the order list will not be shown on the graph.
-								    If a category is included in the order list that isn't in the data, 
-									it will be added as an empty bar categories can be removed from the visuals 
+    Args:
+        df (Frame): DataFrame that contains column x
+        x (str): a column name 
+        fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
+        placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
+        figsize (tuple, optional): Figure size (width, height). Defaults to (6,4).
+        order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
+                                Note: any category not in the order list will not be shown on the graph.
+                                    If a category is included in the order list that isn't in the data, 
+                                    it will be added as an empty bar categories can be removed from the visuals 
 
-	Returns:
-		fig: Matplotlib Figure
-		ax: Matplotlib Axes
-	"""
-	# Make a copy of the dataframe and fillna 
-	temp_df = df.copy()
-
-
-	## Save null value counts and percent for printing 
-	null_count = temp_df[x].isna().sum()
-	null_perc = null_count/len(temp_df)* 100
+    Returns:
+        fig: Matplotlib Figure
+        ax: Matplotlib Axes
+    """
+    # Make a copy of the dataframe and fillna 
+    temp_df = df.copy()
 
 
-	# fillna with placeholder
-	if fillna == True:
-		temp_df[x] = temp_df[x].fillna(placeholder)
+    ## Save null value counts and percent for printing 
+    null_count = temp_df[x].isna().sum()
+    null_perc = null_count/len(temp_df)* 100
 
 
-	# Create figure with desired figsize
-	fig, ax = plt.subplots(figsize=figsize)
-
-	## Plotting a count plot 
-	sns.countplot(data=temp_df, x=x, ax=ax, order=order)
-
-	# Rotate Tick Labels for long names
-	ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-
-	# Add. atitle with the feature name included
-	ax.set_title(f"Column: {x}")#, fontweight='bold')
-
-	# Fix layout and show plot (before print statements)
-	fig.tight_layout()
-	plt.show()
+    # fillna with placeholder
+    if fillna == True:
+        temp_df[x] = temp_df[x].fillna(placeholder)
 
 
-	# Print null value info
-	print(f"- NaN's Found: {null_count} ({round(null_perc,2)}%)")
-	# Print cardinality info
-	nunique = temp_df[x].nunique()
-	print(f"- Unique Values: {nunique}")
+    # Create figure with desired figsize
+    fig, ax = plt.subplots(figsize=figsize)
+
+    ## Plotting a count plot 
+    sns.countplot(data=temp_df, x=x, ax=ax, order=order)
+
+    # Rotate Tick Labels for long names
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+
+    # Add. atitle with the feature name included
+    ax.set_title(f"Column: {x}")#, fontweight='bold')
+
+    # Fix layout and show plot (before print statements)
+    fig.tight_layout()
+    plt.show()
 
 
-	# Get the most most common value, its count as # and as %
-	most_common_val_count = temp_df[x].value_counts(dropna=False).head(1)
-	most_common_val = most_common_val_count.index[0]
-	freq = most_common_val_count.values[0]
+    # Print null value info
+    print(f"- NaN's Found: {null_count} ({round(null_perc,2)}%)")
+    # Print cardinality info
+    nunique = temp_df[x].nunique()
+    print(f"- Unique Values: {nunique}")
 
-	perc_most_common = freq / len(temp_df) * 100
-	print(f"- Most common value: '{most_common_val}' occurs {freq} times ({round(perc_most_common,2)}%)")
 
-	# print message if quasi-constant or constant (most common val more than 98% of data)
-	if perc_most_common > 98:
-		print(f"\n- [!] Warning: '{x}' is a constant or quasi-constant feature and should be dropped.")
+    # Get the most most common value, its count as # and as %
+    most_common_val_count = temp_df[x].value_counts(dropna=False).head(1)
+    most_common_val = most_common_val_count.index[0]
+    freq = most_common_val_count.values[0]
 
-	return fig, ax
+    perc_most_common = freq / len(temp_df) * 100
+    print(f"- Most common value: '{most_common_val}' occurs {freq} times ({round(perc_most_common,2)}%)")
+
+    # print message if quasi-constant or constant (most common val more than 98% of data)
+    if perc_most_common > 98:
+        print(f"\n- [!] Warning: '{x}' is a constant or quasi-constant feature and should be dropped.")
+
+    return fig, ax
 
 
 
@@ -161,22 +161,22 @@ def plot_categorical_vs_target(df, x, y,
   Adapted from Source: https://login.codingdojo.com/m/606/13765/117606
   Plots a combination seaborn barplot (without error bars) and a stripplot.
 
-	Args:
-		df (Frame): DataFrame containing data to plot.
-		x (str): Column to use as the x-axis (categories)
-		y (str, optional): Target column to plot on the y-axis. Defaults to 'SalePrice'.		
-		fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
-		placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
-		figsize (tuple, optional): Figure size (width, height). Defaults to (6,4).
-		order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
-								Note: any category not in the order list will not be shown on the graph.
-								    If a category is included in the order list that isn't in the data, 
-									it will be added as an empty bar categories can be removed from the visuals 
+    Args:
+        df (Frame): DataFrame containing data to plot.
+        x (str): Column to use as the x-axis (categories)
+        y (str, optional): Target column to plot on the y-axis. Defaults to 'SalePrice'.		
+        fillna (bool, optional): if True, fillna with the placeholder. Defaults to True.
+        placeholder (str, optional): Value used to fillna if fillna is True. Defaults to 'MISSING'.
+        figsize (tuple, optional): Figure size (width, height). Defaults to (6,4).
+        order (list, optional): List of categories to include in graph, in the specified order. Defaults to None. 
+                                Note: any category not in the order list will not be shown on the graph.
+                                    If a category is included in the order list that isn't in the data, 
+                                    it will be added as an empty bar categories can be removed from the visuals 
 
-	Returns:
-		fig: Matplotlib Figure
-		ax: Matplotlib Axes
-	"""
+    Returns:
+        fig: Matplotlib Figure
+        ax: Matplotlib Axes
+    """
  
   # Make a copy of the dataframe and fillna
   temp_df = df.copy()
@@ -230,18 +230,18 @@ def plot_numeric_vs_target(df, x, y, figsize=(6,4),
   """UPDATED FUNCTION WITH OPTION FOR WHICH TYPE OF TARGET
   Source: https://login.codingdojo.com/m/606/13765/117605
   Plots a seaborn regplot, with an optional formula annotation.
-	Also calcualtes correlation and displays Pearson's r in the title.
+    Also calcualtes correlation and displays Pearson's r in the title.
 
-	Args:
-		df (Frame): DataFrame with data.
-		x (str): Numeric column name.
-		y (str, optional): Numeric target column name. Defaults to 'SalePrice'.
-		figsize (tuple, optional): Figure size. Defaults to (6,4).
-		annotate (bool, optional): Whether to annotate regplot equation. Defaults to False. 
-		
-	Returns:
-		fig: Matplotlib Figure
-		ax: Matplotlib Axes
+    Args:
+        df (Frame): DataFrame with data.
+        x (str): Numeric column name.
+        y (str, optional): Numeric target column name. Defaults to 'SalePrice'.
+        figsize (tuple, optional): Figure size. Defaults to (6,4).
+        annotate (bool, optional): Whether to annotate regplot equation. Defaults to False. 
+        
+    Returns:
+        fig: Matplotlib Figure
+        ax: Matplotlib Axes
   """
 
   nulls = df[[x,y]].isna().sum()
