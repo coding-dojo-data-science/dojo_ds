@@ -1,5 +1,13 @@
 # dojo-ds 
 
+- [Documentation on readthedocs](http://dojo-ds.readthedocs.io/)  [![Documentation Status](https://readthedocs.org/projects/dojo-ds/badge/?version=latest)](https://dojo-ds.readthedocs.io/en/latest/?badge=latest)
+
+
+
+
+___
+
+# Development Notes
 
 - Deployment Installations (mac) [[source](https://packaging.python.org/tutorials/packaging-projects/)]:
     - `python3 -m pip install --upgrade pip`
