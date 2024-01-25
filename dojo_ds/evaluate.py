@@ -114,7 +114,7 @@ def evaluate_classification(model, X_train=None, y_train=None, X_test=None, y_te
     """
     # Combining arguments used for both training and test results
     shared_kwargs = dict(output_dict=output_dict,  # output_dict: Changed from hard-coded True
-                      figsize=figsize, 
+                    #   figsize=figsize, 
                       colorbar=colorbar, 
                       target_names=target_names,
                       values_format=values_format,
@@ -136,7 +136,7 @@ def evaluate_classification(model, X_train=None, y_train=None, X_test=None, y_te
         # Get predictions for test data
         y_test_pred = model.predict(X_test)
         # Call the helper function to obtain regression metrics for test data
-        results_test = classification_metrics(y_test, y_test_pred,  cmap=cmap_test, figsize=figsize,label='Test Data' , **shared_kwargs)
+        results_test = classification_metrics(y_test, y_test_pred,  cmap=cmap_test, figsize=figsize, label='Test Data' , **shared_kwargs)
     else:
         results_test = None
   
