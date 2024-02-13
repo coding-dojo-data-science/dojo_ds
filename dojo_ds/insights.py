@@ -369,6 +369,7 @@ def plot_coeffs_color(coeffs, top_n=None,  figsize=(8,6), legend_loc='best',
     return ax
 
 
+
 def get_colors_gt_lt(coeffs, threshold=1, color_lt ='darkred',
                      color_gt='forestgreen', color_else='gray'):
     """Creates a dictionary of features:colors based on if value is > or < threshold"""
