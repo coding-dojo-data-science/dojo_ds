@@ -1,36 +1,34 @@
 ## PREVIOUS CLASSIFICATION_METRICS FUNCTION FROM INTRO TO ML
-
 def classification_metrics(y_true, y_pred, label='',
                            output_dict=False, figsize=(8,4),
                            normalize='true', cmap='Blues',
                            colorbar=False, values_format=".2f",
                            target_names = None, return_fig=True):
-    """Calculate classification metrics from preditions and display Confusion matrix.
+    """
+    Calculate classification metrics from predictions and display Confusion matrix.
 
     Args:
         y_true (Series/array): True target values.
-        y_pred (Series/array): Predicted targe values.
-        label (str, optional): Label For Printed Header. Defaults to ''.
+        y_pred (Series/array): Predicted target values.
+        label (str, optional): Label for printed header. Defaults to ''.
         output_dict (bool, optional): Return the results of classification_report as a dict. Defaults to False.
         figsize (tuple, optional): figsize for confusion matrix subplots. Defaults to (8,4).
-        normalize (str, optional): arg for sklearn's ConfusionMatrixDisplay. Defaults to 'true' (conf mat values normalized to true class).
+        normalize (str, optional): Arg for sklearn's ConfusionMatrixDisplay. Defaults to 'true' (conf mat values normalized to true class).
         cmap (str, optional): Colormap for the ConfusionMatrixDisplay. Defaults to 'Blues'.
-        colorbar (bool, optional): Arg for ConfusionMatrixDispaly: include colorbar or not. Defaults to False.
+        colorbar (bool, optional): Arg for ConfusionMatrixDisplay: include colorbar or not. Defaults to False.
         values_format (str, optional): Format values on confusion matrix. Defaults to ".2f".
-        target_names (array, optional): Text labels for the integer-encoded target. Passed in numeric order [label for "0", label for "1", etc.]
-        return_fig (bool, optional): To get matplotlib figure for confusion matrix, set outout_dict to False and set return_fig to True.
+        target_names (array, optional): Text labels for the integer-encoded target. Passed in numeric order [label for "0", label for "1", etc.].
+        return_fig (bool, optional): To get matplotlib figure for confusion matrix, set output_dict to False and set return_fig to True.
 
-    Returns (Only 1 value is returned):
+    Returns:
         dict: Dictionary from classification_report. Only returned if output_dict=True.
-        fig: Matplotlib figure with confusion matrix. Only returned if output_dict=False and return_fig=True
-        
-            
+        fig: Matplotlib figure with confusion matrix. Only returned if output_dict=False and return_fig=True.
+
     Note: 
-        This is a modified version of classification metrics function from Intro to Machine Learning.
+        This is a modified version of the classification metrics function from Intro to Machine Learning.
         Updates:
-          - Reversed raw counts confusion matrix cmap  (so darker==more).
-          - Added arg for normalized confusion matrix values_format
-    
+          - Reversed raw counts confusion matrix cmap (so darker==more).
+          - Added arg for normalized confusion matrix values_format.
     """
     from sklearn.metrics import classification_report, ConfusionMatrixDisplay
     import matplotlib.pyplot as plt
@@ -46,7 +44,7 @@ def classification_metrics(y_true, y_pred, label='',
     ## CONFUSION MATRICES SUBPLOTS
     fig, axes = plt.subplots(ncols=2, figsize=figsize)
     
-    # Create a confusion matrix  of raw counts (left subplot)
+    # Create a confusion matrix of raw counts (left subplot)
     ConfusionMatrixDisplay.from_predictions(y_true, y_pred,
                                             normalize=None, 
                                             cmap='gist_gray_r',# Updated cmap
@@ -79,6 +77,7 @@ def classification_metrics(y_true, y_pred, label='',
         return fig
     
     
+    
 def evaluate_classification(model, X_train=None, y_train=None, X_test=None, y_test=None,
                             figsize=(6,4), normalize='true', output_dict = False,
                             cmap_train='Blues', cmap_test="Reds",colorbar=False,
@@ -103,14 +102,11 @@ def evaluate_classification(model, X_train=None, y_train=None, X_test=None, y_te
         target_names (array, optional): Text labels for the integer-encoded target. Passed in numeric order [label for "0", label for "1", etc.]
         return_fig (bool, optional): Whether the matplotlib figure for confusion matrix is returned. Defaults to False.
                                           Note: Must set outout_dict to False and set return_fig to True to get figure returned.
-
-
      Returns (Only 1 value is returned, but contents vary):
         dict: Dictionary that contains results for "train" and "test. 
               Contents of dictionary depending on output_dict and return_fig:
               - if output_dict==True and return_fig==False: returns dictionary of classification report results
             - if output_dict==False and return_fig==True: returns dictionary of confusion matrix displays.
-
     """
     # Combining arguments used for both training and test results
     shared_kwargs = dict(output_dict=output_dict,  # output_dict: Changed from hard-coded True
@@ -265,13 +261,16 @@ def evaluate_classification_network(model,
 
 
 
-def plot_history(history,figsize=(6,8), return_fig=False):
+def plot_history(history, figsize=(6,8), return_fig=False):
     """Plots the training and validation curves for all metrics in a Tensorflow History object.
 
     Args:
         history (Tensorflow History): History output from training a neural network.
-        figsize (tuple, optional): Total fdigure size. Defaults to (6,8).
+        figsize (tuple, optional): Total figure size. Defaults to (6,8).
         return_fig (boolean, optional): If true, return figure instead of displaying it with plt.show()
+
+    Returns:
+        None or matplotlib.figure.Figure: If return_fig is True, returns the figure object. Otherwise, displays the figure using plt.show().
     """
     import matplotlib.pyplot as plt
     import numpy as np
@@ -306,57 +305,56 @@ def plot_history(history,figsize=(6,8), return_fig=False):
     else:
         plt.show()
 
+
 def convert_y_to_sklearn_classes(y, verbose=False):
-    """Helper function to convert neural network outputs to class labels.
-    if ndim ==1, use as-is.
-    
+    """
+    Helper function to convert neural network outputs to class labels.
 
     Args:
-        y (array/Series): preditions to convert to classes.
+        y (array/Series): Predictions to convert to classes.
         verbose (bool, optional): Print which preprocessing approach is used. Defaults to False.
 
     Returns:
         array: Target as 1D class labels
     """
     import numpy as np
+
     # If already one-dimension
-    if np.ndim(y)==1:
+    if np.ndim(y) == 1:
         if verbose:
             print("- y is 1D, using it as-is.")
         return y
-        
+
     # If 2 dimensions with more than 1 column:
-    elif y.shape[1]>1:
+    elif y.shape[1] > 1:
         if verbose:
-            print("- y is 2D with >1 column. Using argmax for metrics.")   
+            print("- y is 2D with >1 column. Using argmax for metrics.")
         return np.argmax(y, axis=1)
-    
+
     else:
         if verbose:
             print("y is 2D with 1 column. Using round for metrics.")
         return np.round(y).flatten().astype(int)
 
 
-def get_true_pred_labels(model,ds):
-    """	Gets the labels and predicted probabilities from a Tensorflow model and Dataset object.
-    Adapted from source: https://stackoverflow.com/questions/66386561/keras-classification-report-accuracy-is-different-between-model-predict-accurac
-    
+def get_true_pred_labels(model, ds):
+    """Gets the true labels and predicted probabilities from a Tensorflow model and Dataset object.
 
     Args:
-        model (Tensorflow/Keras model): Model to get predictions from.
-        ds (tensorflow.data.Dataset): dataset to iterate through as a numpy iterator.
+        model (Tensorflow/Keras model): The model to get predictions from.
+        ds (tensorflow.data.Dataset): The dataset to iterate through.
 
     Returns:
-        _type_: _description_
+        tuple: A tuple containing the true labels and predicted probabilities.
     """
     import numpy as np
 
     y_true = []
     y_pred_probs = []
-    
+
     # Loop through the dataset as a numpy iterator
     for images, labels in ds.as_numpy_iterator():
-        
+
         # Get prediction with batch_size=1
         y_probs = model.predict(images, batch_size=1, verbose=0)
         # Combine previous labels/preds with new labels/preds
@@ -365,25 +363,28 @@ def get_true_pred_labels(model,ds):
     ## Convert the lists to arrays
     y_true = np.array(y_true)
     y_pred_probs = np.array(y_pred_probs)
-    
+
     return y_true, y_pred_probs
 
 
 
 # #### Regression
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, mean_absolute_percentage_error
-def regression_metrics(y_true, y_pred, label='', verbose = True, output_dict=False):
-    """Calculate MEA, MSE, RMSE, R-Squared and MAPE using the true and predicted labels.
+def regression_metrics(y_true, y_pred, label='', verbose=True, output_dict=False):
+    """
+    Calculate MEA, MSE, RMSE, R-Squared and MAPE using the true and predicted labels.
 
     Args:
         y_true (Series/array): True target values.
-        y_pred (Series/array): Predicted targe values.
+        y_pred (Series/array): Predicted target values.
         label (str, optional): Label to display in results header. Defaults to ''.
-        verbose (bool, optional): Controls printing of results. Defaults to True. 
-        output_dict (bool, optional): Return results in a dictionary. Defaults to False. (Note one of either verbose or output_dict should be set to True)
+        verbose (bool, optional): Controls printing of results. Defaults to True.
+        output_dict (bool, optional): Return results in a dictionary. Defaults to False.
+            (Note one of either verbose or output_dict should be set to True)
 
     Returns:
-        dict: Dictionary of reuslts with keys: 'Label','MAE','MSE', 'RMSE', 'MAPE','R^2'. Only returned if out_dict==True.
+        dict: Dictionary of results with keys: 'Label', 'MAE', 'MSE', 'RMSE', 'MAPE', 'R^2'.
+            Only returned if output_dict is True.
     """
     import numpy as np
     # Get metrics
@@ -392,12 +393,12 @@ def regression_metrics(y_true, y_pred, label='', verbose = True, output_dict=Fal
     rmse = mean_squared_error(y_true, y_pred, squared=False)
     r_squared = r2_score(y_true, y_pred)
     mape = mean_absolute_percentage_error(y_true, y_pred)
-    if (verbose==False) & (output_dict==False):
-     raise Exception("At least one of the following arguments must be set to True: output_dict, verbose.")
+    if (verbose == False) & (output_dict == False):
+        raise Exception("At least one of the following arguments must be set to True: output_dict, verbose.")
 
     if verbose == True:
         # Print Result with Label and Header
-        header = "-"*60
+        header = "-" * 60
         print(header, f"Regression Metrics: {label}", header, sep='\n')
         print("Relative Comparison Metrics:")
         print(f"- MAE = {mae:,.3f}")
@@ -407,7 +408,6 @@ def regression_metrics(y_true, y_pred, label='', verbose = True, output_dict=Fal
         print("\nAbsolute Metrics")
         print(f"- MAPE = {mape:,.3f}")
         print(f"- R^2 = {r_squared:,.3f}")
-  
     if output_dict == True:
         metrics = {'Label':label, 'MAE':mae,
                     'MSE':mse, 'RMSE':rmse, 'MAPE':mape,
@@ -416,8 +416,7 @@ def regression_metrics(y_true, y_pred, label='', verbose = True, output_dict=Fal
 
 
 
-def evaluate_regression(reg, X_train, y_train, X_test, y_test, verbose = True,
-                        output_frame=False):
+def evaluate_regression(reg, X_train, y_train, X_test, y_test, verbose=True, output_frame=False):
     """Evalutes an sklearn-compatible regression model on training and test data. 
     For each data split, return the classification report and confusion matrix display. 
 
@@ -431,31 +430,29 @@ def evaluate_regression(reg, X_train, y_train, X_test, y_test, verbose = True,
         output_dict (bool, optional): Return results in a dictionary. Defaults to False. (Note one of either verbose or output_dict should be set to True)
 
     Returns:
-        dict: Dictionary of reuslts with keys: 'Label','MAE','MSE', 'RMSE', 'MAPE','R^2'. Only returned if out_dict==True.
+        dict: Dictionary of results with keys: 'Label','MAE','MSE', 'RMSE', 'MAPE','R^2'. Only returned if output_dict==True.
     """
     # Get predictions for training data
     y_train_pred = reg.predict(X_train)
 
     # Call the helper function to obtain regression metrics for training data
-    results_train = regression_metrics(y_train, y_train_pred, verbose = verbose,
-                                        output_dict=output_frame,
-                                        label='Training Data')
+    results_train = regression_metrics(y_train, y_train_pred, verbose=verbose, output_dict=output_frame, label='Training Data')
     print()
+
     # Get predictions for test data
     y_test_pred = reg.predict(X_test)
-    # Call the helper function to obtain regression metrics for test data
-    results_test = regression_metrics(y_test, y_test_pred, verbose = verbose,
-                                    output_dict=output_frame,
-                                        label='Test Data' )
 
-  # Store results in a dataframe if ouput_frame is True
+    # Call the helper function to obtain regression metrics for test data
+    results_test = regression_metrics(y_test, y_test_pred, verbose=verbose, output_dict=output_frame, label='Test Data')
+
+    # Store results in a dataframe if output_frame is True
     if output_frame:
         import pandas as pd
-        results_df = pd.DataFrame([results_train,results_test])
+        results_df = pd.DataFrame([results_train, results_test])
         # Set the label as the index
         results_df = results_df.set_index('Label')
         # Set index.name to none to get a cleaner looking result
-        results_df.index.name=None
+        results_df.index.name = None
         # Return the dataframe
         return results_df.round(3)
 
@@ -466,10 +463,10 @@ def evaluate_ols(result,X_train_df, y_train, show_summary=True):
     """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression, with option to display summary.
 
     Args:
-        model (statsmodels OLS): statsmodels regression model.
-        X_test_df (array/Frame): Test Data
-        y_test (array/Series): Test Labels
-        figsize (tuple, optional): Figsize for regression plots. Defaults to (12,5).
+        result (statsmodels RegressionResultsWrapper): The result object obtained from fitting the OLS model.
+        X_train_df (pandas DataFrame): The training data features.
+        y_train (pandas Series): The training data labels.
+        show_summary (bool, optional): Whether to display the summary of the regression model. Defaults to True.
     """
     import matplotlib.pyplot as plt
     import statsmodels.api as sm
@@ -501,10 +498,10 @@ def plot_residuals(model,X_test_df, y_test,figsize=(12,5)):
     """Plots a Q-Q Plot and residual plot for a regression model.
 
     Args:
-        model (regression model): regression model that supports .predict
-        X_test_df (_type_): Test Data
-        y_test (_type_): Test Labels
-        figsize (tuple, optional): Figsize for regression plots. Defaults to (12,5).
+        model (regression model): The regression model that supports .predict.
+        X_test_df (DataFrame): The test data.
+        y_test (array-like): The test labels.
+        figsize (tuple, optional): The figsize for the regression plots. Defaults to (12,5).
     """
 
     import matplotlib.pyplot as plt

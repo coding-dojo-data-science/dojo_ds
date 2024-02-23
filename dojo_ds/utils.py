@@ -397,19 +397,18 @@ def column_report(df,index_col=None, sort_column='iloc', ascending=True,
                   interactive=False, return_df=False):
     """
     Displays a DataFrame summary of each column's: 
-    - name, iloc, dtypes, null value count & %, # of 0's, min, max,med,mean, etc
+    - name, iloc, dtypes, null value count & %, # of 0's, min, max, med, mean, etc
     
     Args:
-        df (DataFrame): df to report 
-        index_col (column to set as index, str): Defaults to None.
-        sort_column (str, optional): [description]. Defaults to 'iloc'.
-        ascending (bool, optional): [description]. Defaults to True.
-        as_df (bool, optional): [description]. Defaults to False.
-        interactive (bool, optional): [description]. Defaults to False.
-        return_df (bool, optional): [description]. Defaults to False.
+        df (DataFrame): The DataFrame to report on.
+        index_col (str, optional): The column to set as the index. Defaults to None.
+        sort_column (str, optional): The column to sort the report by. Defaults to 'iloc'.
+        ascending (bool, optional): Whether to sort the report in ascending order. Defaults to True.
+        interactive (bool, optional): Whether to enable interactive sorting. Defaults to False.
+        return_df (bool, optional): Whether to return the non-styled version of the report DataFrame. Defaults to False.
 
     Returns:
-        column_report (df): Non-styled version of displayed df report
+        column_report (DataFrame): The non-styled version of the displayed report DataFrame.
     """
     from ipywidgets import interact
     import pandas as pd
@@ -429,8 +428,6 @@ def column_report(df,index_col=None, sort_column='iloc', ascending=True,
             zeros[col] = np.sum( df[col].values == 0)
         return zeros
 
-
-    ##
     df_report = pd.DataFrame({'.iloc[:,i]': range(len(df.columns)),
                             'column name':df.columns,
                             'dtypes':df.dtypes.astype('str'),
@@ -501,24 +498,37 @@ def show_del_me_code(called_by_inspect_vars=False):
 
 
 
-def get_methods(obj,private=False):
+def get_methods(obj, private=False):
     """
     Retrieves a list of all non-private methods (default) from inside of obj.
-    - If private==False: only returns methods whose names do NOT start with a '_'
     
     Args:
         obj (object): Object to retrieve methods from.
-        private (bool): Whether to retrieve private methods or public.
+        private (bool, optional): Whether to retrieve private methods or public. 
+            Defaults to False, which retrieves only public methods.
 
     Returns:
-        list: the names of all of the retrieved methods.
+        list: The names of all the retrieved methods.
+
+    Examples:
+        >>> class MyClass:
+        ...     def public_method(self):
+        ...         pass
+        ...     def _private_method(self):
+        ...         pass
+        ...
+        >>> obj = MyClass()
+        >>> get_methods(obj)
+        ['public_method']
+        >>> get_methods(obj, private=True)
+        ['public_method', '_private_method']
     """
     method_list = [func for func in dir(obj) if callable(getattr(obj, func))]
     if private:
-        filt_methods = list(filter(lambda x: '_' in x[0] ,method_list))
+        filt_methods = list(filter(lambda x: '_' in x[0], method_list))
     else:
-        filt_methods = list(filter(lambda x: '_' not in x[0] ,method_list))
-    return  filt_methods
+        filt_methods = list(filter(lambda x: '_' not in x[0], method_list))
+    return filt_methods
 
 
 def get_attributes(obj,private=False):
@@ -528,10 +538,10 @@ def get_attributes(obj,private=False):
     
     Args:
         obj (object): Object to retrieve attributes from.
-        private (bool): Whether to retrieve private attributes or public.
+        private (bool, optional): Whether to retrieve private attributes or public. Defaults to False.
     
     Returns:
-        list: the names of all of the retrieved attributes.
+        list: The names of all the retrieved attributes.
     """
     method_list = [func for func in dir(obj) if not callable(getattr(obj, func))]
     if private:
@@ -542,21 +552,29 @@ def get_attributes(obj,private=False):
     
     
     
-def clickable_link(path,label=None):
-    """Adapted from: https://www.geeksforgeeks.org/how-to-create-a-table-with-clickable-hyperlink-to-a-local-file-in-pandas/"""
-    # returns the final component of a url
-    # f_url = os.path.basename(path)
+def clickable_link(path, label=None):
+    """
+    Converts a file path into a clickable hyperlink.
+
+    Parameters:
+    path (str): The file path to be converted.
+    label (str, optional): The label to be displayed for the hyperlink. If not provided, the file path will be used as the label.
+
+    Returns:
+    str: The clickable hyperlink.
+
+    Adapted from: https://www.geeksforgeeks.org/how-to-create-a-table-with-clickable-hyperlink-to-a-local-file-in-pandas/
+    """
     if label is None:
-    # convert the url into link
         return '<a href="{}">{}</a>'.format(path, path)
     else: 
-        return '<a href="{}">{}</a>'.format(path, label)  
+        return '<a href="{}">{}</a>'.format(path, label)
         
         
         
         
 
-def get_or_print_filesize(fpath, unit ="MB", print_or_return='print'):
+def get_or_print_filesize(fpath, unit="MB", print_or_return='print'):
     """Get the file size as a string, converted to the requested unit(B,KB, MB, GB)
 
     Args:
@@ -566,21 +584,28 @@ def get_or_print_filesize(fpath, unit ="MB", print_or_return='print'):
 
     Returns:
         string: file size + units
+
+    Raises:
+        FileNotFoundError: If the specified file does not exist.
     """
     import os
+
+    if not os.path.exists(fpath):
+        raise FileNotFoundError(f"File '{fpath}' does not exist.")
+
     size = os.path.getsize(fpath)
+
     if unit == 'KB':
         size /= 1024
     elif unit == 'MB':
-        size /= (1024**2)
+        size /= (1024 ** 2)
     elif unit == 'GB':
-        size /= (1024**3)
-    # else:
-        # print(f"{size:.3f} B")
+        size /= (1024 ** 3)
+
     formatted_size = f"{size:.3f} {unit}"
-    
+
     if print_or_return == 'print':
         print(formatted_size)
-    else: 
+    else:
         return formatted_size
     

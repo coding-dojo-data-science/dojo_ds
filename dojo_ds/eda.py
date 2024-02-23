@@ -303,14 +303,25 @@ def plot_numeric_vs_target(df, x, y, figsize=(6,4),
 
 ######### NEW
 def plot_correlation(df, cmap='coolwarm', cols=None):
-    if cols == None:
-        cols = df.columns
-    corr = df[cols].corr(numeric_only=True)
+  """
+  Plots a correlation matrix heatmap for the given DataFrame.
 
-    fig, ax = plt.subplots(figsize=(8,6))
-    sns.heatmap(corr, cmap=cmap, ax=ax, annot=True, center=0)
-    ax.set_title("Correlation Matrix")
-    return fig
+  Parameters:
+  df (DataFrame): The input DataFrame.
+  cmap (str, optional): The color map to use for the heatmap. Defaults to 'coolwarm'.
+  cols (list, optional): The columns to include in the correlation matrix. If None, all columns are included.
+
+  Returns:
+  fig (Figure): The matplotlib Figure object containing the correlation matrix heatmap.
+  """
+  if cols == None:
+    cols = df.columns
+  corr = df[cols].corr(numeric_only=True)
+
+  fig, ax = plt.subplots(figsize=(8,6))
+  sns.heatmap(corr, cmap=cmap, ax=ax, annot=True, center=0)
+  ax.set_title("Correlation Matrix")
+  return fig
 
 
 from ._eda_functions_plotly import *
@@ -318,7 +329,14 @@ from ._eda_functions_plotly import *
 
 
 def annotate_regplot_equation(ax):
-  """Adapted from Source: https://www.statology.org/seaborn-regplot-equation/
+  """
+  Annotates a regression plot with the equation of the regression line.
+
+  Parameters:
+  ax (matplotlib.axes.Axes): The axes object containing the regression plot.
+
+  Adapted from Source: https://www.statology.org/seaborn-regplot-equation/
+
   Example Use:
   >> fig, ax = plot_numeric_vs_target(df, x="Living Area Sqft")
   >> annotate_regplot_equation(ax)
@@ -326,6 +344,6 @@ def annotate_regplot_equation(ax):
   import scipy
   #calculate slope and intercept of regression equation
   slope, intercept, r, p, sterr = scipy.stats.linregress(x=ax.get_lines()[0].get_xdata(),
-                                                        y=ax.get_lines()[0].get_ydata())
+                            y=ax.get_lines()[0].get_ydata())
   eqn = f'y = {slope:,.2f} * X + {intercept:,.2f}'
   ax.legend(handles=[ax.get_lines()[0]], labels=[eqn])

@@ -8,24 +8,27 @@ import matplotlib.pyplot as plt
 # from IPython.display import display
 
 
-def annotate_hbars(ax, ha='left',va='center',size=12,  xytext=(4,0),
+def annotate_hbars(ax, ha='left', va='center', size=12, xytext=(4,0),
                   textcoords='offset points'):
+    """
+    Annotates horizontal bars on a matplotlib Axes object.
+
+    Parameters:
+    - ax (matplotlib.axes.Axes): The Axes object to annotate.
+    - ha (str): The horizontal alignment of the annotation text. Default is 'left'.
+    - va (str): The vertical alignment of the annotation text. Default is 'center'.
+    - size (int): The font size of the annotation text. Default is 12.
+    - xytext (tuple): The offset of the annotation text from the annotated point. Default is (4, 0).
+    - textcoords (str): The coordinate system used for xytext. Default is 'offset points'.
+    """
     for bar in ax.patches:
-
-        ## get the value to annotate
         val = bar.get_width()
-
-        if val<0:
-            x=0
+        if val < 0:
+            x = 0
         else:
-            x=val
-
-
-        ## calculate center of bar
+            x = val
         bar_ax = bar.get_y() + bar.get_height()/2
-
-        # ha and va stand for the horizontal and vertical alignment
-        ax.annotate(f"{val:,.2f}", (x,bar_ax),ha=ha,va=va,size=size,
+        ax.annotate(f"{val:,.2f}", (x, bar_ax), ha=ha, va=va, size=size,
                     xytext=xytext, textcoords=textcoords)
 
 
@@ -87,14 +90,27 @@ def get_coefficients(reg, name='Coefficients'):
     #     coeffs.loc['Intercept'] = reg.intercept_
     # return coeffs
     
-def get_coeffs_linreg(lin_reg, feature_names = None, sort=True,ascending=True,
-                     name='LinearRegression Coefficients'):
+def get_coeffs_linreg(lin_reg, feature_names=None, sort=True, ascending=True,
+                      name='LinearRegression Coefficients'):
+    """
+    Get the coefficients of a linear regression model.
+
+    Parameters:
+    - lin_reg: The trained linear regression model.
+    - feature_names: Optional. The names of the features used in the model. If not provided, it will use the feature names from the model.
+    - sort: Optional. Whether to sort the coefficients by value. Default is True.
+    - ascending: Optional. Whether to sort the coefficients in ascending order. Default is True.
+    - name: Optional. The name of the coefficients series. Default is 'LinearRegression Coefficients'.
+
+    Returns:
+    - coeffs: A pandas Series containing the coefficients of the linear regression model.
+    """
     if feature_names is None:
         feature_names = lin_reg.feature_names_in_
     ## Saving the coefficients
-    coeffs = pd.Series(lin_reg.coef_, index= feature_names)
+    coeffs = pd.Series(lin_reg.coef_, index=feature_names)
     coeffs['intercept'] = lin_reg.intercept_
-    if sort==True:
+    if sort == True:
         coeffs = coeffs.sort_values(ascending=ascending)
     return coeffs
 
@@ -104,6 +120,7 @@ def plot_coefficients(coeffs, figsize=(6,5), title='Regression Coefficients',
                       sort_values=True, ascending=True,
                       ):
     raise Exception("Deprecated: use plot_coeffs instead.")
+
 #     ## Exclude intercept if intercept==False
 #     if intercept==False:
 #         if intercept_name in coeffs:
@@ -120,11 +137,28 @@ def plot_coefficients(coeffs, figsize=(6,5), title='Regression Coefficients',
 #     ax.axvline(0,color='k', lw=1)
 #     ax.set(ylabel='Feature Name',xlabel='Coefficient',title=title)
 #     return ax
+
 def plot_coeffs(coeffs, top_n=None, figsize=(4,5), 
                 intercept=False, intercept_name="intercept", 
                 annotate=False, ha='left', va='center', size=12, 
                 xytext=(4,0), textcoords='offset points'):
     """ Plots the top_n coefficients from a Series, with optional annotations.
+    
+    Parameters:
+    coeffs (pd.Series): The coefficients to be plotted.
+    top_n (int, optional): The number of top coefficients to plot. If None, all coefficients will be plotted. Default is None.
+    figsize (tuple, optional): The size of the figure. Default is (4, 5).
+    intercept (bool, optional): Whether to include the intercept coefficient in the plot. Default is False.
+    intercept_name (str, optional): The name of the intercept coefficient. Default is "intercept".
+    annotate (bool, optional): Whether to annotate the coefficients on the plot. Default is False.
+    ha (str, optional): The horizontal alignment of the annotations. Default is 'left'.
+    va (str, optional): The vertical alignment of the annotations. Default is 'center'.
+    size (int, optional): The font size of the annotations. Default is 12.
+    xytext (tuple, optional): The offset of the annotations from the data points. Default is (4, 0).
+    textcoords (str, optional): The coordinate system used for the annotations. Default is 'offset points'.
+    
+    Returns:
+    matplotlib.axes.Axes: The plot of the coefficients.
     """
     # Drop intercept if intercept=False and 
     if (intercept == False) & (intercept_name in coeffs.index):
@@ -155,8 +189,17 @@ def plot_coeffs(coeffs, top_n=None, figsize=(4,5),
 
 
 def plot_residuals(model,X_test_df, y_test,figsize=(12,5)):
-    """Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
+    """
+    Plots a Q-Q Plot and residual plot for a statsmodels OLS regression.
 
+    Parameters:
+    model (statsmodels.regression.linear_model.RegressionResultsWrapper): The fitted regression model.
+    X_test_df (pandas.DataFrame): The test dataset features.
+    y_test (array-like): The test dataset target variable.
+    figsize (tuple, optional): The size of the figure. Defaults to (12,5).
+
+    Returns:
+    None
     """
     ## Make predictions and calculate residuals
     y_pred = model.predict(X_test_df)
@@ -178,10 +221,25 @@ def plot_residuals(model,X_test_df, y_test,figsize=(12,5)):
 
 
 def summarize_df(df_):
-    """Source: Insights for Stakeholder Lesson - https://login.codingdojo.com/m/0/13079/91969
+    """
+    Summarizes a DataFrame by providing insights on column data types, null values, unique values, and numeric range.
+
+    Parameters:
+    df_ (pandas.DataFrame): The DataFrame to be summarized.
+
+    Returns:
+    pandas.DataFrame: A summary report DataFrame with the following columns:
+        - 'Column': The column names of the DataFrame.
+        - 'dtype': The data types of the columns.
+        - '# null': The number of null values in each column.
+        - 'null (%)': The percentage of null values in each column.
+        - 'nunique': The number of unique values in each column.
+        - 'min': The minimum numeric value in each column.
+        - 'max': The maximum numeric value in each column.
+
     Example Usage:
     >> df = pd.read_csv(filename)
-    >> summary = summarize_df(df);
+    >> summary = summarize_df(df)
     """
     df = df_.copy()
     report = pd.DataFrame({
@@ -199,9 +257,21 @@ def summarize_df(df_):
     return report.reset_index()
 
 
-def get_importances(model, feature_names=None,name='Feature Importance',
+def get_importances(model, feature_names=None, name='Feature Importance',
                    sort=False, ascending=True):
+    """
+    Extract the feature importances for a given model.
 
+    Parameters:
+    model (object): The trained model for which feature importances are calculated.
+    feature_names (list, optional): List of feature names. If not provided, it will be extracted from the model.
+    name (str, optional): Name of the feature importances series. Default is 'Feature Importance'.
+    sort (bool, optional): Whether to sort the importances in ascending order. Default is False.
+    ascending (bool, optional): Whether to sort the importances in ascending order. Default is True.
+
+    Returns:
+    importances (pd.Series): Series containing the feature importances.
+    """
     ## checking for feature names
     if feature_names == None:
         feature_names = model.feature_names_in_
@@ -220,6 +290,18 @@ def get_importances(model, feature_names=None,name='Feature Importance',
 
 
 def plot_importance(importances, top_n=None,  figsize=(8,6)):
+    """
+    Plots the importance of features in a horizontal bar chart.
+
+    Parameters:
+    importances (pandas.Series): The importance values of the features.
+    top_n (int, optional): The number of top most important features to plot. If None, all features will be plotted. Default is None.
+    figsize (tuple, optional): The size of the figure. Default is (8, 6).
+
+    Returns:
+    matplotlib.axes.Axes: The axes object of the plot.
+
+    """
     # sorting with asc=false for correct order of bars
     if top_n==None:
         ## sort all features and set title
@@ -241,7 +323,18 @@ def plot_importance(importances, top_n=None,  figsize=(8,6)):
 
 def get_color_dict(importances, color_rest='#006ba4' , color_top='green',
                     top_n=7):
-    ## color -coding top 5 bars
+    """
+    Returns a dictionary mapping feature names to colors based on their importances.
+
+    Parameters:
+    importances (pd.Series): A pandas Series containing feature importances.
+    color_rest (str, optional): The color code for non-highlighted features. Defaults to '#006ba4'.
+    color_top (str, optional): The color code for highlighted features. Defaults to 'green'.
+    top_n (int, optional): The number of top features to highlight. Defaults to 7.
+
+    Returns:
+    dict: A dictionary mapping feature names to colors.
+    """
     highlight_feats = importances.sort_values(ascending=True).tail(top_n).index
     colors_dict = {col: color_top if col in highlight_feats else color_rest for col in importances.index}
     return colors_dict
@@ -249,21 +342,30 @@ def get_color_dict(importances, color_rest='#006ba4' , color_top='green',
 
 def plot_importance_color(importances, top_n=None,  figsize=(8,6), 
                           color_dict=None, ax=None):
-    """Formerly called `plot_importance_color_ax`
+    """
+    Plot the feature importances with optional color highlighting.
+
+    Parameters:
+    - importances (pandas.Series): The feature importances.
+    - top_n (int, optional): The number of top features to display. If None, all features will be displayed. Default is None.
+    - figsize (tuple, optional): The figure size. Default is (8, 6).
+    - color_dict (dict, optional): A dictionary mapping feature names to colors for highlighting. Default is None.
+    - ax (matplotlib.axes.Axes, optional): The axes object to plot on. If None, a new figure and axes will be created. Default is None.
+
+    Returns:
+    - ax (matplotlib.axes.Axes): The axes object containing the plot.
 
     Example Use:
     fig, axes = plt.subplots(ncols=2, figsize=(20,8))
     n = 20 # setting the # of features to use for both subplots
     
-    plot_importance_color_ax(importances, top_n=n, ax=axes[0], color_dict= colors_top7)
+    plot_importance_color(importances, top_n=n, ax=axes[0], color_dict= colors_top7)
     axes[0].set(title='R.F. Importances')
 
-    plot_importance_color_ax(permutation_importances, top_n=n, ax=axes[1], color_dict=colors_top7)
+    plot_importance_color(permutation_importances, top_n=n, ax=axes[1], color_dict=colors_top7)
     axes[1].set(title='Permutation Importances')
     fig.tight_layout()
-    
     """
-    
     # sorting with asc=false for correct order of bars
     if top_n==None:
         ## sort all features and set title
@@ -292,20 +394,63 @@ def plot_importance_color(importances, top_n=None,  figsize=(8,6),
     return ax
 
 
-def get_coeffs_logreg(logreg, feature_names = None, sort=True,ascending=True,
-                      name='LogReg Coefficients', class_index=0):
-    if feature_names is None:
-        feature_names = logreg.feature_names_in_ 
+# def get_coeffs_logreg(logreg, feature_names = None, sort=True,ascending=True,
+#                       name='LogReg Coefficients', class_index=0):
+#     if feature_names is None:
+#         feature_names = logreg.feature_names_in_ 
     
+#     ## Saving the coefficients
+#     coeffs = pd.Series(logreg.coef_[class_index],
+#                        index= feature_names, name=name)
+    
+#     # use .loc to add the intercept to the series
+#     coeffs.loc['intercept'] = logreg.intercept_[class_index]
+#     if sort == True:
+#         coeffs = coeffs.sort_values(ascending=ascending)  
+#     return coeffs
+
+
+
+def get_coeffs_logreg(logreg, feature_names = None, sort=True,ascending=True,
+                      name='LogReg Coefficients', class_index=0,  
+                      include_intercept=True, as_odds=False):
+    """
+    Get the coefficients of a logistic regression model.
+
+    Parameters:
+    logreg (object): The logistic regression model.
+    feature_names (list, optional): List of feature names. If None, it uses the feature names from the model.
+    sort (bool, optional): Whether to sort the coefficients. Default is True.
+    ascending (bool, optional): Whether to sort the coefficients in ascending order. Default is True.
+    name (str, optional): Name of the coefficients. Default is 'LogReg Coefficients'.
+    class_index (int, optional): Index of the class for which to get the coefficients. Default is 0.
+    include_intercept (bool, optional): Whether to include the intercept in the coefficients. Default is True.
+    as_odds (bool, optional): Whether to exponentiate the coefficients to obtain odds ratios. Default is False.
+
+    Returns:
+    pd.Series: Series containing the coefficients.
+    """
+    
+    if feature_names is None:
+        feature_names = logreg.feature_names_in_
+        
     ## Saving the coefficients
     coeffs = pd.Series(logreg.coef_[class_index],
                        index= feature_names, name=name)
     
-    # use .loc to add the intercept to the series
-    coeffs.loc['intercept'] = logreg.intercept_[class_index]
+    if include_intercept:
+        # use .loc to add the intercept to the series
+        coeffs.loc['intercept'] = logreg.intercept_[class_index]
+        
+    if as_odds==True:
+        coeffs = np.exp(coeffs)
     if sort == True:
-        coeffs = coeffs.sort_values(ascending=ascending)  
+        coeffs = coeffs.sort_values(ascending=ascending)
+    
+        
     return coeffs
+
+
 
 
 
@@ -315,20 +460,24 @@ def plot_coeffs_color(coeffs, top_n=None,  figsize=(8,6), legend_loc='best',
                       label_gt='More Likely', label_lt='Less Likely',
                    plot_kws = {}):
     """Plots series of coefficients
-        Args:
-        ceoffs (pands Series): importance values to plot
-        top_n (int): The # of features to display (Default=None).
-                         If None, display all.
-                        otherwise display top_n most important
-                        
-        figsize (tuple): figsize tuple for .plot
-        color_dict (dict): dict with index values as keys with color to use as vals
-                            Uses series.index.map(color_dict).
-        plot_kws (dict): additional keyword args accepted by panda's .plot
+    
+    Args:
+        coeffs (pandas Series): Importance values to plot.
+        top_n (int): The number of features to display (Default=None).
+                     If None, display all. Otherwise, display top_n most important.
+        figsize (tuple): figsize tuple for .plot.
+        legend_loc (str): Location of the legend in the plot (Default='best').
+        threshold (float): Threshold value for coloring the coefficients (Default=None).
+        color_lt (str): Color for coefficients less than the threshold (Default='darkred').
+        color_gt (str): Color for coefficients greater than the threshold (Default='forestgreen').
+        color_else (str): Color for coefficients that do not meet the threshold (Default='gray').
+        label_thresh (str): Label for the threshold line in the legend (Default='Equally Likely').
+        label_gt (str): Label for coefficients greater than the threshold in the legend (Default='More Likely').
+        label_lt (str): Label for coefficients less than the threshold in the legend (Default='Less Likely').
+        plot_kws (dict): Additional keyword arguments accepted by pandas' .plot method.
         
-         
-         Returns:
-        Axis: matplotlib axis
+    Returns:
+        matplotlib.axes._subplots.AxesSubplot: Matplotlib axis object.
     """
     # sorting with asc=false for correct order of bars
     if top_n is None:
@@ -372,7 +521,19 @@ def plot_coeffs_color(coeffs, top_n=None,  figsize=(8,6), legend_loc='best',
 
 def get_colors_gt_lt(coeffs, threshold=1, color_lt ='darkred',
                      color_gt='forestgreen', color_else='gray'):
-    """Creates a dictionary of features:colors based on if value is > or < threshold"""
+    """
+    Creates a dictionary of features and their corresponding colors based on whether the value is greater than or less than the threshold.
+
+    Parameters:
+    coeffs (pandas.DataFrame): The coefficients dataframe.
+    threshold (float): The threshold value. Default is 1.
+    color_lt (str): The color for values less than the threshold. Default is 'darkred'.
+    color_gt (str): The color for values greater than the threshold. Default is 'forestgreen'.
+    color_else (str): The color for values equal to the threshold. Default is 'gray'.
+
+    Returns:
+    dict: A dictionary mapping features to their respective colors.
+    """
     colors_dict = {}
     for i in coeffs.index:
         rounded_coeff = np.round( coeffs.loc[i],3)
