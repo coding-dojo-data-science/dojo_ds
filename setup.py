@@ -11,7 +11,7 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 ## Grab requirements form file
-with open("requirements.txt") as f:
+with open("./requirements.txt") as f:
     req_list = f.readlines()
     req_list = [x.strip() for x in req_list if not x.startswith('#') and x.strip() != '']
     # req_LIST = [str(req) for req in req_list]
