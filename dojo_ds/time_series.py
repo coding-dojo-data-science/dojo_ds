@@ -1,6 +1,12 @@
 import statsmodels.tsa.api as tsa
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+import statsmodels.tsa.api as tsa
+import numpy as np
+import statsmodels.tsa.api as tsa
+import pandas as pd
+import matplotlib.pyplot as plt
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score, mean_absolute_percentage_error
 
 def get_adfuller_results(ts, alpha=.05, label='adfuller', **kwargs):
@@ -205,6 +211,10 @@ def thiels_U(ts_true, ts_pred):
     return U
 
 
+def calc_thiels_U(*args, **kwargs):
+    return thiels_U(*args, **kwargs)
+
+
 def regression_metrics_ts(ts_true, ts_pred, label="", verbose=True, output_dict=False,
                           thiels_U=False):
     """
@@ -227,8 +237,8 @@ def regression_metrics_ts(ts_true, ts_pred, label="", verbose=True, output_dict=
     rmse = mean_squared_error(ts_true, ts_pred, squared=False)
     r_squared = r2_score(ts_true, ts_pred)
     mae_perc = mean_absolute_percentage_error(ts_true, ts_pred) * 100
-    if thiels_U:
-        U = thiels_U(ts_true, ts_pred)
+    if thiels_U==True:
+        U = calc_thiels_U(ts_true, ts_pred)
     if verbose:
         header = "---" * 20
         print(header, f"Regression Metrics: {label}", header, sep="\n")
@@ -240,6 +250,7 @@ def regression_metrics_ts(ts_true, ts_pred, label="", verbose=True, output_dict=
         
         if thiels_U:
             print(f"- Thiel's U = {U:,.2f}")
+        print(header)
             
     if output_dict:
         metrics = {
@@ -419,7 +430,6 @@ ___
             display_func = print
             
         display_func(table)
-        
 
 
 
@@ -452,7 +462,8 @@ def make_best_arima(auto_model, ts_train, exog=None, fit_kws={}):
 def evaluate_ts_model(model, ts_train, ts_test, exog_train=None, exog_test=None,
                       return_scores=False, show_summary=True,
                       n_train_lags=None, figsize=(9,3),
-                      title='Comparing Forecast vs. True Data'):
+                      title='Comparing Forecast vs. True Data',
+                     plot_diagnostics=True):
     """
     Evaluates a time series model by generating forecasts and comparing them to the true data.
 
@@ -473,35 +484,43 @@ def evaluate_ts_model(model, ts_train, ts_test, exog_train=None, exog_test=None,
     - If return_scores=False, returns the model.
 
     """
-    ## GET FORECAST             
-    # Check if auto-arima, if so, extract sarima model
-    if hasattr(model, "arima_res_"):
-        print(f"- Fitting a new ARIMA using the params from the auto_arima...")
-        model = make_best_arima(model, ts_train, exog=exog_train)
-        
+    import warnings
 
-    # Get forecast         
-    forecast = model.get_forecast(exog=exog_test, steps=len(ts_test))
-    forecast_df = forecast.summary_frame()
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        ## GET FORECAST             
+        # Check if auto-arima, if so, extract sarima model
+        if hasattr(model, "arima_res_"):
+            print(f"- Fitting a new ARIMA using the params from the auto_arima...")
+            model = make_best_arima(model, ts_train, exog=exog_train)
+            
 
-    # Visualize forecast
-    plot_forecast(ts_train, ts_test, forecast_df, 
-                  n_train_lags=n_train_lags, figsize=figsize,
-                 title=title)
-
-    plt.show()
-                    
-    # Get and display the regression metrics BEFORE showing plot
-    reg_res = regression_metrics_ts(ts_test, forecast_df['mean'], 
-                                        output_dict=True)
+                
     
-    if show_summary==True:
-        display(model.summary())
-        model.plot_diagnostics(figsize=(8,4))
-        plt.tight_layout()
+        # Get forecast         
+        forecast = model.get_forecast(exog=exog_test, steps=len(ts_test))
+        forecast_df = forecast.summary_frame()
+                        
+        # Get and display the regression metrics BEFORE showing plot
+        reg_res = regression_metrics_ts(ts_test, forecast_df['mean'], 
+                                            output_dict=True, thiels_U=True)
+        
+        if show_summary==True:
+            display(model.summary())
+            
+        if plot_diagnostics==True:
+            model.plot_diagnostics(figsize=(8,4))
+            plt.tight_layout()
+            plt.show()
+        # Visualize forecast
+        plot_forecast(ts_train, ts_test, forecast_df, 
+                      n_train_lags=n_train_lags, figsize=figsize,
+                     title=title)
         plt.show()
-      
-    if return_scores:
-        return model, reg_res
-    else:
-        return model
+    
+        
+    
+        if return_scores:
+            return model, reg_res
+        else:
+            return model
