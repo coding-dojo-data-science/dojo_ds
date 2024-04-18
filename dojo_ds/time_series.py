@@ -254,3 +254,58 @@ def regression_metrics_ts(ts_true, ts_pred, label="", verbose=True, output_dict=
             metrics['Thiel\'s U'] = U
         return metrics
 
+
+
+
+
+def plot_acf(ts, nlags=None, alpha=0.05, figsize=(12,4), annotate_sig=False): 
+    """
+    Plots the autocorrelation function (ACF) for a given time series.
+
+    Parameters:
+    - ts: The time series data.
+    - nlags: The number of lags to include in the plot. If None, all lags are included.
+    - alpha: The significance level for determining significant lags.
+    - figsize: The size of the figure (width, height) in inches.
+    - annotate_sig: Whether to annotate significant lags with red dashed lines.
+
+    Returns:
+    - None
+    """
+    fig, ax = plt.subplots(figsize=figsize) 
+    tsa.graphics.plot_acf(ts, ax=ax, lags=nlags, alpha=alpha)
+
+    if annotate_sig == True:
+        sig_lags = get_sig_lags(ts,nlags=nlags,alpha=alpha, type='ACF')
+        
+        ## ADDING ANNOTATING SIG LAGS
+        for lag in sig_lags:
+            ax.axvline(lag, ls='--', lw=1, zorder=0, color='red')
+            
+            
+
+def plot_pacf(ts, nlags=None, alpha=0.05, figsize=(12,4), annotate_sig=False): 
+    """
+    Plots the partial autocorrelation function (PACF) for a given time series.
+
+    Parameters:
+    - ts: The time series data.
+    - nlags: The number of lags to include in the plot. If None, all lags will be included.
+    - alpha: The significance level for determining significant lags.
+    - figsize: The size of the figure (width, height) in inches.
+    - annotate_sig: Whether to annotate significant lags with red dashed lines.
+
+    Returns:
+    - None
+    """
+    fig, ax = plt.subplots(figsize=figsize) 
+    tsa.graphics.plot_pacf(ts, ax=ax, lags=nlags, alpha=alpha)
+
+    if annotate_sig == True:
+        sig_lags = get_sig_lags(ts,nlags=nlags,alpha=alpha, type='PACF')
+        
+        ## ADDING ANNOTATING SIG LAGS
+        for lag in sig_lags:
+            ax.axvline(lag, ls='--', lw=1, zorder=0, color='red')
+
+
