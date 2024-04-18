@@ -11,13 +11,15 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 ## Grab requirements form file
-# with open("requirements.txt") as f:
-#     req_list = f.readlines()
-#     req_LIST = [str(req) for req in req_list]
-req_list = ['scikit-learn>=1.2.2','pandas>=1.5.3','matplotlib>=3.7.1', 'seaborn>=0.12.2']#, 'plotly>=5.15.0']
+with open("requirements.txt") as f:
+    req_list = f.readlines()
+    req_list = [x.strip() for x in req_list if not x.startswith('#') and x.strip() != '']
+    # req_LIST = [str(req) for req in req_list]
+# req_list = ['scikit-learn>=1.2.2','pandas>=1.5.3','matplotlib>=3.7.1', 'seaborn>=0.12.2'
+#             'statsmodels>=0.13.5']#, 'plotly>=5.15.0']
 requirements = ['Click>=7.0', *req_list  ]
 
-test_requirements = [ ]
+test_requirements = ['pmdarima==2.0.4','sphinx_rtd_theme' ]
 
 setup(
     author="James Irving",
