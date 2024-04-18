@@ -210,9 +210,8 @@ Examine the autocorrelation function (ACF) and partial autocorrelation function 
 
 
 
-![img](./acf-pacf-table.png)
-
-`https://assets.codingdojo.com/boomyeah2015/codingdojo/curriculum/content/chapter/1695862972__Screenshot20230927205946.png`)
+`![img](./acf-pacf-table.png)`
+![img](https://github.com/coding-dojo-data-science/dojo_ds/blob/main/assets/acf-pacf-table.png?raw=true)
 
 Use the differenced data for your plots.
 
