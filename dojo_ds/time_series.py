@@ -309,3 +309,113 @@ def plot_pacf(ts, nlags=None, alpha=0.05, figsize=(12,4), annotate_sig=False):
             ax.axvline(lag, ls='--', lw=1, zorder=0, color='red')
 
 
+def display_ts_workflow(return_text=False):
+    """
+    Displays the Time Series Modeling Workflow - (S)ARIMA markdown document.
+
+    Parameters:
+    - return_text (bool): If True, returns the text content of the markdown document as a string. Default is False.
+
+    Returns:
+    - str: The text content of the markdown document, if return_text is True.
+
+    """
+    import requests
+    try:
+        from IPython.display import Markdown, display
+        display_func = lambda x: display(Markdown(x))
+    except:
+        display_func = print
+    url = "https://raw.githubusercontent.com/coding-dojo-data-science/dojo_ds/main/assets/Time%20Series%20Modeling%20Workflow%20-%20(S)ARIMA.md"
+    resp = requests.get(url)
+    display_func(resp.text)
+
+    if return_text:
+        return resp.text
+
+
+
+
+
+
+
+
+
+# def reference_interpreting_acf_pacf(seasonal=True, return_string = False):
+#     table = """**Determining (S)ARIMA Orders from ACF/PACF**:\n
+# |                  | AR(p)                | MA(q)               | ARMA(p,q) |
+# |:----- | :---------------: | :---------------:|:---------------:|
+# | **ACF**              | Gradually decreases  | Dramatic drop after lag \(q\) | Gradually decreases |
+# | **PACF**             | Dramatic drop after lag \(p\) | Gradually decreases      | Gradually decreases  |
+# | **ARIMA Order** (p,d,q) | (p,d,0) | (0,d,q) | Start with (1,d,1) & Iterate|
+
+# ___
+
+# **If seasonality is present**
+
+# | ***If seasonal*** | S-AR(P)                | S-MA(Q)                | SARIMA(P,Q)            |
+# |:-----------------| :---------------: | :---------------:|:---------------:|  
+# | **ACF** (seasonal lags)†         | Gradually decreases   | Dramatic drop after lag \(Q\)| Gradually decreases | 
+# | **PACF** (seasonal lags)†       |  Dramatic drop after lag \(P\) | Gradually decreases    | Gradually decreases |
+# | **Seasonal Order** (P,D,Q)  | (P,D,0)      | (0,D,Q)       | Start with (1,D,1) & Iterate  | 
+
+# - † seasonal lags = lags that are a multiple of the season length (m). E.g., If daily, m=7, check lags 7,14,21,etc.
+
+# """
+#     if return_string == True:
+#         return table
+#     else: 
+#         from IPython.display import Markdown, display
+#         display(Markdown(table))
+
+
+def reference_interpreting_acf_pacf(seasonal=True, return_string=False):
+    """
+    Generates a table for determining (S)ARIMA orders from ACF/PACF.
+
+    Args:
+        seasonal (bool, optional): Indicates if seasonality is present. Defaults to True.
+        return_string (bool, optional): Indicates if the table should be returned as a string. 
+            If False, the table is displayed using IPython's Markdown. Defaults to False.
+
+    Returns:
+        str or None: The table as a string if return_string is True, otherwise None.
+    """
+    table = """#### **Determining (S)ARIMA Orders from ACF/PACF**:\n
+|                  | AR(p)                | MA(q)               | ARMA(p,q) |
+|:----- | :---------------: | :---------------:|:---------------:|
+| **ACF**              | Gradually decreases  | Dramatic drop after lag \(q\) | Gradually decreases |
+| **PACF**             | Dramatic drop after lag \(p\) | Gradually decreases      | Gradually decreases  |
+| **ARIMA Order (p,d,q)** | **(p,d,0)** | **(0,d,q)** | **Start with (1,d,1) & Iterate**|
+
+
+___
+
+
+#### **Determining Seasonal Orders** (only if seasonality is present):
+
+| ***If seasonal*** | S-AR(P)                | S-MA(Q)                | SARIMA(P,Q)            |
+|:-----------------| :---------------: | :---------------:|:---------------:|  
+| **ACF** (seasonal lags)†         | Gradually decreases   | Dramatic drop after lag \(Q\)| Gradually decreases | 
+| **PACF** (seasonal lags)†       |  Dramatic drop after lag \(P\) | Gradually decreases    | Gradually decreases |
+| **Seasonal Order (P,D,Q)**  | **(P,D,0)**      | **(0,D,Q)**       | **Start with (1,D,1) & Iterate**  | 
+
+- † seasonal lags = lags that are a multiple of the season length (m). E.g., If daily, m=7, check lags 7,14,21,etc.
+
+"""
+    if seasonal==False:
+        table = table.split('___')[0]
+        table = table.replace("(S)ARIMA",'ARIMA')
+   
+    
+             
+    if return_string:
+        return table
+    else: 
+        try:
+            from IPython.display import Markdown, display
+            display_func = lambda x: display(Markdown(x))
+        except:
+            display_func = print
+            
+        display_func(table)

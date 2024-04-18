@@ -1,14 +1,7 @@
 # Time Series Modeling Workflow - (S)ARIMA
 
-Time series modeling can be challenging and involves the process of trial and error. The time series modeling workflow is presented as a series of steps, but like many aspects of data science, remember that the process does not necessarily follow this strict linear template. You will test and explore, repeating steps as necessary. Still, seeing the entire process from start to finish can be helpful. This lesson provides a breakdown of the time series workflow that can be used as a reference for modeling.
-
-Note that the code blocks in this lesson only serve as a template. 
-
-
 
 ## 1. Import libraries and Custom Functions
-
-Begin by importing the necessary Python libraries for time series analysis and modeling, including Statsmodels, pmdarima, etc.
 
 ```python
 import matplotlib.pyplot as plt
@@ -17,20 +10,17 @@ import seaborn as sns
 import statsmodels.api as sm
 import statsmodels.tsa.api as tsa
 import pmdarima as pm
-from pmdarima.arima.utils import ndiffs, nsdiffs
+from pmdarima.arima.utils import ndiffs, nsdiffs, diff, diff_inv
 from pmdarima.model_selection import train_test_split
 import pmdarima as pm
 plt.rcParams['figure.figsize']=(12,3)
 ```
 
 We have created several custom functions that must be defined in your notebook before calling.
-
 - plot_forecast
 - regression_metrics_ts
 - get_adfuller_results
 - plot_acf_pacf
-
-
 
 ## 2. Load and Explore Data
 
@@ -50,6 +40,7 @@ df
 
 ```
 # make sure index is datetime index
+
 ```
 
 **Define Time Series for Modeling**
@@ -58,8 +49,6 @@ df
     - How far into the future do you want to forecast? (Your test split needs to be at least this long)
 
 - Decide the final timespan to use for modeling (more isn't always better) and save as `ts`.
-
-
 
 ```python
 # Select time series to model.
@@ -79,8 +68,6 @@ ts.index
 
 If needed, resample to the desired frequency
 
-
-
 ```python
 # resample to desired frequency
 # ts = ts.resample(...)..agg()
@@ -93,8 +80,6 @@ If needed, resample to the desired frequency
 # Visualize selected time series
 ax = ts.plot()
 ```
-
-
 
 ## 3. Handle Missing Values
 
@@ -109,8 +94,6 @@ ts.isna().sum()
 # ts = ts.fillna(method='ffill')
 # ts = ts.fillna(method='bfill')
 ```
-
-##  
 
 ## 4. Determine if a seasonal or non-seasonal model is appropriate for the data
 
@@ -137,8 +120,7 @@ fig.tight_layout()
 ```
 
 
-
-Determine the magnitude of the seasonal component relative to the range of data
+#### Determine the magnitude of the seasonal component relative to the range of data
 
 ```python
 # How big is the seasonal component
@@ -148,7 +130,7 @@ seasonal_delta = decomp.seasonal.max() - decomp.seasonal.min()
 print(f"The seasonal component is {seasonal_delta} which is ~{seasonal_delta/(ts.max()-ts.min()) * 100 :.2f}% of the variation in time series.")
 ```
 
-Determine the length of a season (m)
+#### Determine the length of a season (m)
 
 ```python
 # zooming in on smaller time period to see length of season
@@ -173,9 +155,7 @@ Assess the stationarity of your time series. Stationarity is a critical assumpti
     - If still not stationary, apply second-order differencing and try again (`ts_diff2 = ts.diff().diff().dropna()`
     - For seasonal differencing, include m such as: ts_diff = ts.diff(m).dropna()
 
-- If applying differencing achieved stationarity
-
-    :
+- If applying differencing achieved stationarity:
 
     - Take the order of the differencing (1 or 2) as `d`
     - Use the differenced time series for following EDA steps (ACF/PACF)
@@ -185,7 +165,7 @@ Assess the stationarity of your time series. Stationarity is a critical assumpti
 get_adfuller_results(ts)
 ```
 
-Or Programmatically determine d and D
+- Or Programmatically determine d and D
 
 ```python
 # Determine differencing
@@ -195,11 +175,17 @@ D = nsdiffs(ts, m = _)
 print(f'D is {D}')
 ```
 
-Apply the differencing
+- Apply the differencing
 
 ```python
 # For example, one non seasonal differencing
-ts_diff = ts.diff().dropna()
+
+# If using pandas
+# ts_diff = ts.diff().dropna()
+
+# If using pmdarima's diff
+# ts_diff = diff(ts, differences=d)
+
 ```
 
 ## 6. Check Autocorrelation and Partial Autocorrelation to determine initial orders
@@ -209,8 +195,6 @@ Examine the autocorrelation function (ACF) and partial autocorrelation function 
 ## Estimate Initial Orders with ACF and PACF
 
 
-
-`![img](./acf-pacf-table.png)`
 ![img](https://github.com/coding-dojo-data-science/dojo_ds/blob/main/assets/acf-pacf-table.png?raw=true)
 
 Use the differenced data for your plots.
@@ -222,8 +206,6 @@ Use the custom function and annotate seasons if applicable
 ```python
 plot_acf_pacf(ts_diff, annotate_seas=True, m = _);
 ```
-
-
 
 ## 7. Split into Training and Test Sets
 
@@ -247,9 +229,6 @@ ax = train.plot(label="train")
 test.plot(label="test")
 ax.legend();
 ```
-
-
-
 ## 8. Define the Time Series Model Orders and Fit the model to the training data
 
 Select an appropriate time series model based on the characteristics of your data, the results of stationarity and autocorrelation analyses (make ACF/PACF plots), and the identified patterns. Models include Autoregressive Integrated Moving Average (ARIMA), Seasonal ARIMA (SARIMA), etc.
@@ -298,8 +277,6 @@ forecast_df = sarima.get_forecast(len(test)).summary_frame()
 plot_forecast(train, test, forecast_df, n_train_lags = 50)
 ```
 
-**
-**
 
 **10. Evaluate Model Performance**
 
@@ -390,7 +367,6 @@ forecast_df = final_model.get_forecast(len(test)).summary_frame()
 plot_forecast(train, test, forecast_df, n_train_lags = 20);
 ```
 
-##  
 
 ## 17. Calculate Summary Metrics for Stakeholder (Optional)
 
