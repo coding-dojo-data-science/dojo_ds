@@ -419,3 +419,89 @@ ___
             display_func = print
             
         display_func(table)
+        
+
+
+
+def make_best_arima(auto_model, ts_train, exog=None, fit_kws={}):
+    """
+    Fits a final ARIMA model using the best parameters obtained from an auto_model and evaluates its performance.
+
+    Parameters:
+    auto_model (AutoARIMA): The AutoARIMA model object that contains the best parameters.
+    ts_train (array-like): The time series data used for training the ARIMA model.
+    exog (array-like, optional): Exogenous variables to be included in the model. Default is None.
+    fit_kws (dict, optional): Additional keyword arguments to be passed to the `fit` method of the SARIMAX model. Default is an empty dictionary.
+
+    Returns:
+    SARIMAX: The fitted SARIMAX model with the best parameters.
+
+    """
+    best_model = tsa.SARIMAX(
+        ts_train,
+        exog=exog,
+        order=auto_model.order,
+        seasonal_order=auto_model.seasonal_order,
+        sarimax_kwargs=auto_model.sarimax_kwargs,
+    ).fit(disp=False, **fit_kws)
+    return best_model
+
+    
+            
+        
+def evaluate_ts_model(model, ts_train, ts_test, exog_train=None, exog_test=None,
+                      return_scores=False, show_summary=True,
+                      n_train_lags=None, figsize=(9,3),
+                      title='Comparing Forecast vs. True Data'):
+    """
+    Evaluates a time series model by generating forecasts and comparing them to the true data.
+
+    Parameters:
+    - model: The time series model to be evaluated (Either SARIMAX or AutoARIMA object)
+    - ts_train: The training time series data.
+    - ts_test: The testing time series data.
+    - exog_train: The exogenous variables for the training data (optional).
+    - exog_test: The exogenous variables for the testing data (optional).
+    - return_scores: Whether to return the model and regression metrics (optional, default=False).
+    - show_summary: Whether to display the model summary and diagnostics plots (optional, default=True).
+    - n_train_lags: The number of lagged values to include in the training data visualization (optional).
+    - figsize: The size of the forecast plot (optional, default=(9,3)).
+    - title: The title of the forecast plot (optional, default='Comparing Forecast vs. True Data').
+
+    Returns:
+    - If return_scores=True, returns the model and regression metrics.
+    - If return_scores=False, returns the model.
+
+    """
+    ## GET FORECAST             
+    # Check if auto-arima, if so, extract sarima model
+    if hasattr(model, "arima_res_"):
+        print(f"- Fitting a new ARIMA using the params from the auto_arima...")
+        model = make_best_arima(model, ts_train, exog=exog_train)
+        
+
+    # Get forecast         
+    forecast = model.get_forecast(exog=exog_test, steps=len(ts_test))
+    forecast_df = forecast.summary_frame()
+
+    # Visualize forecast
+    plot_forecast(ts_train, ts_test, forecast_df, 
+                  n_train_lags=n_train_lags, figsize=figsize,
+                 title=title)
+
+    plt.show()
+                    
+    # Get and display the regression metrics BEFORE showing plot
+    reg_res = regression_metrics_ts(ts_test, forecast_df['mean'], 
+                                        output_dict=True)
+    
+    if show_summary==True:
+        display(model.summary())
+        model.plot_diagnostics(figsize=(8,4))
+        plt.tight_layout()
+        plt.show()
+      
+    if return_scores:
+        return model, reg_res
+    else:
+        return model
