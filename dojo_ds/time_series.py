@@ -131,47 +131,6 @@ def plot_acf_pacf(ts, nlags=40, figsize=(10, 5), annotate_sig=False, alpha=.05, 
     return fig
 
 
-def regression_metrics_ts(ts_true, ts_pred, label="", verbose=True, output_dict=False):
-    """
-    Calculates regression metrics for comparing true and predicted time series data.
-
-    Parameters:
-    - ts_true (array-like): The true time series data.
-    - ts_pred (array-like): The predicted time series data.
-    - label (str): The label for the metrics. Default is an empty string.
-    - verbose (bool): Whether to print the metrics. Default is True.
-    - output_dict (bool): Whether to return the metrics as a dictionary. Default is False.
-
-    Returns:
-    - metrics (dict): The regression metrics as a dictionary. Only returned if output_dict is True.
-    """
-    mae = mean_absolute_error(ts_true, ts_pred)
-    mse = mean_squared_error(ts_true, ts_pred)
-    rmse = mean_squared_error(ts_true, ts_pred, squared=False)
-    r_squared = r2_score(ts_true, ts_pred)
-    mae_perc = mean_absolute_percentage_error(ts_true, ts_pred) * 100
-
-    if verbose:
-        header = "---" * 20
-        print(header, f"Regression Metrics: {label}", header, sep="\n")
-        print(f"- MAE = {mae:,.3f}")
-        print(f"- MSE = {mse:,.3f}")
-        print(f"- RMSE = {rmse:,.3f}")
-        print(f"- R^2 = {r_squared:,.3f}")
-        print(f"- MAPE = {mae_perc:,.2f}%")
-
-    if output_dict:
-        metrics = {
-            "Label": label,
-            "MAE": mae,
-            "MSE": mse,
-            "RMSE": rmse,
-            "R^2": r_squared,
-            "MAPE(%)": mae_perc,
-        }
-        return metrics
-
-
 def plot_forecast(ts_train, ts_test, forecast_df, n_train_lags=None, 
                   figsize=(10,4), title='Comparing Forecast vs. True Data'):
     """
@@ -214,4 +173,84 @@ def plot_forecast(ts_train, ts_test, forecast_df, n_train_lags=None,
     ax.legend();
     
     return fig, ax
+
+
+def thiels_U(ts_true, ts_pred):
+    """Calculate's Thiel's U metric for forecasting accuracy.
+    Accepts true values and predicted values.
+    Original Formula Source: https://docs.oracle.com/cd/E57185_01/CBREG/ch06s02s03s04.html
+    Adapted Function from Source: https://github.com/jirvingphd/predicting-the-SP500-using-trumps-tweets_capstone-project/blob/cf11f6ed88721433d2c00cb1f8486206ab179cc0/bsds/my_keras_functions.py#L735
+    Returns: 
+        U (float)
+        
+    Thiel's U Value Interpretation:
+    - <1  = Forecasting is better than guessing 
+    - 1   = Forecasting is about as good as guessing
+    - >1  = Forecasting is worse than guessing 
+    """
+    import numpy as np
+    # sum_list = []
+    num_list=[]
+    denom_list=[]
+    
+    for t in range(len(ts_true)-1):
+        
+        num_exp = (ts_pred[t+1] - ts_true[t+1])/ts_true[t]
+        num_list.append([num_exp**2])
+        
+        denom_exp = (ts_true[t+1] - ts_true[t])/ts_true[t]
+        denom_list.append([denom_exp**2])
+        
+    U = np.sqrt( np.sum(num_list) / np.sum(denom_list))
+    return U
+
+
+def regression_metrics_ts(ts_true, ts_pred, label="", verbose=True, output_dict=False,
+                          thiels_U=False):
+    """
+    Calculates regression metrics for comparing true and predicted time series data.
+
+    Parameters:
+    - ts_true (array-like): The true time series data.
+    - ts_pred (array-like): The predicted time series data.
+    - label (str): The label for the metrics. Default is an empty string.
+    - verbose (bool): Whether to print the metrics. Default is True.
+    - output_dict (bool): Whether to return the metrics as a dictionary. Default is False.
+    - thiels_U (bool): Whether to calculate Thiel's U metric. Default is False.
+                        - See docstring for thiels_U function for interpretation.
+
+    Returns:
+    - metrics (dict): The regression metrics as a dictionary. Only returned if output_dict is True.
+    """
+    mae = mean_absolute_error(ts_true, ts_pred)
+    mse = mean_squared_error(ts_true, ts_pred)
+    rmse = mean_squared_error(ts_true, ts_pred, squared=False)
+    r_squared = r2_score(ts_true, ts_pred)
+    mae_perc = mean_absolute_percentage_error(ts_true, ts_pred) * 100
+    if thiels_U:
+        U = thiels_U(ts_true, ts_pred)
+    if verbose:
+        header = "---" * 20
+        print(header, f"Regression Metrics: {label}", header, sep="\n")
+        print(f"- MAE = {mae:,.3f}")
+        print(f"- MSE = {mse:,.3f}")
+        print(f"- RMSE = {rmse:,.3f}")
+        print(f"- R^2 = {r_squared:,.3f}")
+        print(f"- MAPE = {mae_perc:,.2f}%")
+        
+        if thiels_U:
+            print(f"- Thiel's U = {U:,.2f}")
+            
+    if output_dict:
+        metrics = {
+            "Label": label,
+            "MAE": mae,
+            "MSE": mse,
+            "RMSE": rmse,
+            "R^2": r_squared,
+            "MAPE(%)": mae_perc,
+        }
+        if thiels_U:
+            metrics['Thiel\'s U'] = U
+        return metrics
 
