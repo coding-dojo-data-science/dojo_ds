@@ -11,6 +11,7 @@ from . import evaluate
 from . import insights 
 from . import nlp
 from . import time_series
+from . import datasets
 
 # from . import deployment_functions as deploy
 
