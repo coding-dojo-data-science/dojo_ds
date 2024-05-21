@@ -94,8 +94,8 @@ def import_packages(import_list_of_tuples = None,  display_table=True,
         df_imports = df_imports[['Package','Handle','Version','Documentation','Imported',]]
         # df_imports.insert(1,'',' as ')
         # df_imports = df_imports.rename({'Package':'import','Handle':'as'},axis=1)
-        df_imports['Imported'].fillna('N', inplace=True)
-        df_imports.fillna('',inplace=True)
+        df_imports['Imported'] = df_imports['Imported'].fillna('N')
+        df_imports = df_imports.fillna('')
     
 
         # display(pkg_vers_df.style.hide_index().set_caption('Package Version Report')) 
@@ -121,7 +121,7 @@ def import_packages(import_list_of_tuples = None,  display_table=True,
         try:
             dfs = df_imports.style.hide_index().set_caption('Loaded Packages & Info')
         except:
-            dfs = df_imports.style.hide()
+            dfs = df_imports.style.hide().set_caption('Loaded Packages & Info')
         
         ## Determine if links will have display text
         if link_text is None:
