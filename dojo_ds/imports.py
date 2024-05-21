@@ -118,7 +118,10 @@ def import_packages(import_list_of_tuples = None,  display_table=True,
             print(f"dojo_ds v{ds.__version__} loaded.")#  Read the docs: https://fs-ds.readthedocs.io/en/latest/ ")
         except:
             pass
-        dfs = df_imports.style.hide_index().set_caption('Loaded Packages & Info')
+        try:
+            dfs = df_imports.style.hide_index().set_caption('Loaded Packages & Info')
+        except:
+            dfs = df_imports.style.hide()
         
         ## Determine if links will have display text
         if link_text is None:
