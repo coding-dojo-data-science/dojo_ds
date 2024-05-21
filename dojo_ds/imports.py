@@ -27,7 +27,7 @@ def clear():
 
 def import_packages(import_list_of_tuples = None,  display_table=True, 
                     check_versions=True, link_text=None,
-                    check_packages = ['matplotlib','seaborn','pandas','numpy','sklearn','fsds'] ): #append_to_default_list=True, imports_have_description = True):
+                    check_packages = ['matplotlib','seaborn','pandas','numpy','sklearn','dojo_ds'] ): #append_to_default_list=True, imports_have_description = True):
     """Uses the exec function to load in a list of tuples with:
     [('module','md','example generic tuple item')] formatting.
     >> Default imports_list:
@@ -37,7 +37,7 @@ def import_packages(import_list_of_tuples = None,  display_table=True,
     ('matplotlib.pyplot',   'plt',  "Matplotlib's matlab-like plotting module"),
     ('seaborn',     'sns',  "High-level data visualization library based on matplotlib"),
     ('IPython.display','dp','Display modules with helpful display and clearing commands.')
-    ('fsds','fs','Custom data science bootcamp student package')]
+    ('dojo_ds','fs','Custom data science bootcamp student package')]
     """
 
 
@@ -48,12 +48,13 @@ def import_packages(import_list_of_tuples = None,  display_table=True,
     if (import_list_of_tuples is None): #or (append_to_default_list is True):
         import_list = [('Package','Handle','Documentation'),
                        ('pandas','pd', "https://pandas.pydata.org/docs/"),#'High performance data structures and tools'),
-                       ('fsds','fs',"https://fs-ds.readthedocs.io/en/latest/"),#'Custom data science bootcamp student package'), # 
+                       ('dojo_ds','ds',"https://fs-ds.readthedocs.io/en/latest/"),#'Custom data science bootcamp student package'), # 
                        ('numpy','np',"https://numpy.org/doc/stable/reference/"), # 'scientific computing with Python'), #
                        ('matplotlib','mpl','https://matplotlib.org/stable/api/index.html'),#"Matplotlib's base OOP module with formatting artists"), #
                        ('matplotlib.pyplot','plt',"https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.html#module-matplotlib.pyplot"),#"Matplotlib's matlab-like plotting module"), #
                        ('seaborn','sns',"https://seaborn.pydata.org/api.html"),#"High-level data visualization library based on matplotlib"), #
-                       ('IPython.display','dp',"https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html")]#'Display modules with helpful display and clearing commands.')]#,
+                    #    ('IPython.display','dp',"https://ipython.readthedocs.io/en/stable/api/generated/IPython.display.html")]#'Display modules with helpful display and clearing commands.')]#,
+        ]
         # ('cufflinks','cf','Adds df.iplot() interactive Plotly figs. To use, run >> cf.go_offline()')]
 
     # if using own list, rename to 'import_list'
@@ -112,9 +113,9 @@ def import_packages(import_list_of_tuples = None,  display_table=True,
         # # df_imports = df_imports[['Handle','Package','Documentation','Version']]
         # df_imports = df_imported[['Handle','Package','Documentation']]
         #.sort_values('Package').
-        import dojo_ds as fs
+        import dojo_ds as ds
         try:
-            print(f"fsds v{fs.__version__} loaded.")#  Read the docs: https://fs-ds.readthedocs.io/en/latest/ ")
+            print(f"dojo_ds v{ds.__version__} loaded.")#  Read the docs: https://fs-ds.readthedocs.io/en/latest/ ")
         except:
             pass
         dfs = df_imports.style.hide_index().set_caption('Loaded Packages & Info')
@@ -149,7 +150,7 @@ def clickable(path,label=None):
 
 
 
-def check_package_versions(packages = ['matplotlib','seaborn','pandas','numpy','sklearn','fsds'],
+def check_package_versions(packages = ['matplotlib','seaborn','pandas','numpy','sklearn','dojo_ds'],
                            fpath=False, show_only=True):
     """Imports packages and saves the name and version number to a dataframe"""
     import pandas as pd

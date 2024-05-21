@@ -525,7 +525,7 @@ def column_report(df,index_col=None, sort_column='iloc', ascending=True,
 		
 
 
-def check_package_versions(packages = ['matplotlib','seaborn','pandas','numpy','sklearn','fsds'],
+def check_package_versions(packages = ['matplotlib','seaborn','pandas','numpy','sklearn','dojo_ds'],
 						   fpath=False, show_only=True):
 	"""Imports packages and saves the name and version number to a dataframe"""
 	import pandas as pd
