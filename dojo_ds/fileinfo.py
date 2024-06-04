@@ -81,14 +81,23 @@ def get_filetype_emoji(file_type):
         '.h5': '🧠',
         '.tfrecord': '🧠',
         '.index': '🧠',
+        '.data': '🧠',
+        '.ckpt': '🧠',
+        '.tflite': '🧠'
+        '.tf record': '🧠',
+        '.pth': '🧠'
+        '.pt': '🧠
+        '.onnx': '🧠'
+        '.pkl': '🧠'
+        '.pickle': '🧠
+        '.hdf5': '🧠,
+        '.npy': '🧠',
+        '.safetensor': '🧠',
     }
     # Check for exact match in predefined extensions
     if file_type in file_type_emojis:
         return file_type_emojis[file_type]
     
-    # Check for extensions starting with .data
-    if file_type.startswith('.data-') and len(file_type.split('-')) == 4:
-        return '🧠'
     
     return '📁'
 
@@ -187,8 +196,10 @@ def list_files_in_directory(directory, size_threshold=100, recursive=True, retur
                     'File Type': 'directory',
                     'File Type Icon': '🗂️',
                     'Is Large File': False,
-                    'Path Compatible': path_compatible
+                    # 'Path Compatible': path_compatible
                 }
+                if check_compatibility:
+                    dir_info['Path Compatible'] = path_compatible
                 
                 if return_df:
                     file_list.append(dir_info)
@@ -217,8 +228,10 @@ def list_files_in_directory(directory, size_threshold=100, recursive=True, retur
 
             # Determine file type and its corresponding emoji
             file_type = os.path.splitext(file)[-1].lower()
+            if re.match(r'\.data-\d{5}-of-\d{5}', file_type):
+                file_type = 'tf record'  # Normalize to generic '.data' file type
+                
             file_type_icon = get_filetype_emoji(file_type)
-
             # Check path compatibility if requested
             path_compatible = True
             if check_compatibility:
@@ -237,8 +250,9 @@ def list_files_in_directory(directory, size_threshold=100, recursive=True, retur
                 'File Type': file_type,
                 'File Type Icon': file_type_icon,
                 'Is Large File': is_large_file,
-                'Path Compatible': path_compatible
             }
+            if check_compatibility:
+                file_info['Path Compatible'] = path_compatible
 
             # Include detailed information if requested
             if details:
