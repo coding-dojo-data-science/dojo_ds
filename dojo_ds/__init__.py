@@ -6,12 +6,13 @@ __author__ = """James Irving"""
 __email__ = 'james.irving.phd@gmail.com'
 __version__ = '1.1.8'
 from . import data_enrichment as data
-from . import eda 
-from . import evaluate
-from . import insights 
-from . import nlp
-from . import time_series
-from . import datasets
+from . import eda as eda
+from . import evaluate as evaluate
+from . import insights  as insights
+from . import nlp as nlp
+from . import time_series as time_series
+from . import datasets as datasets
+from . import fileinfo as fileinfo
 
 # from . import deployment_functions as deploy
 
