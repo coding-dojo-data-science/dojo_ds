@@ -89,8 +89,8 @@ def get_filetype_emoji(file_type):
         '.pt': '🧠
         '.onnx': '🧠'
         '.pkl': '🧠'
-        '.pickle': '🧠
-        '.hdf5': '🧠,
+        '.pickle': '🧠',
+        '.hdf5': '🧠',
         '.npy': '🧠',
         '.safetensor': '🧠',
     }
