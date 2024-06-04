@@ -83,12 +83,12 @@ def get_filetype_emoji(file_type):
         '.index': '🧠',
         '.data': '🧠',
         '.ckpt': '🧠',
-        '.tflite': '🧠'
+        '.tflite': '🧠',
         '.tf record': '🧠',
-        '.pth': '🧠'
-        '.pt': '🧠
-        '.onnx': '🧠'
-        '.pkl': '🧠'
+        '.pth': '🧠',
+        '.pt': '🧠',
+        '.onnx': '🧠',
+        '.pkl': '🧠',
         '.pickle': '🧠',
         '.hdf5': '🧠',
         '.npy': '🧠',
