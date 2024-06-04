@@ -4,7 +4,7 @@ __author__ = James Irving, Brenda Hungerford
 """
 __author__ = """James Irving"""
 __email__ = 'james.irving.phd@gmail.com'
-__version__ = '1.1.10'
+__version__ = '1.1.11'
 from . import data_enrichment as data
 from . import eda as eda
 from . import evaluate as evaluate
