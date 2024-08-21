@@ -203,7 +203,8 @@ def evaluate_classification_network(model,
     # check if X_train was provided
     if X_train is not None:
         ## Check if X_train is a dataset
-        if hasattr(X_train,'map'):
+        # if hasattr(X_train,'map'):
+        if type(X_train).startswith("tensorflow"):
             # If it IS a Datset:
             # extract y_train and y_train_pred with helper function
             y_train, y_train_pred = get_true_pred_labels(model, X_train)
