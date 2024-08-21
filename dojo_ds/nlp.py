@@ -122,7 +122,35 @@ def batch_preprocess_texts(
 	Returns:
 		list of tokens: Processed texts as a list of tokens.
 	"""
-	# Function implementation
+	# from tqdm.notebook import tqdm
+	from tqdm import tqdm
+	if nlp is None:
+		import spacy
+		nlp = spacy.load("en_core_web_sm")
+	processed_texts = []
+	for doc in tqdm(nlp.pipe(texts, disable=disable, batch_size=batch_size, n_process=n_process)):
+		tokens = []
+		for token in doc:
+			# Check if should remove stopwords and if token is stopword
+			if (remove_stopwords == True) and (token.is_stop == True):
+				# Continue the loop with the next token
+				continue
+			# Check if should remove stopwords and if token is stopword
+			if (remove_punct == True) and (token.is_punct == True):
+				continue
+			# Check if should remove stopwords and if token is stopword
+			if (remove_punct == True) and (token.is_space == True):
+				continue
+			
+			## Determine final form of output list of tokens/lemmas
+			if use_lemmas:
+				tokens.append(token.lemma_.lower())
+			else:
+				tokens.append(token.text.lower())
+		processed_texts.append(tokens)
+	return processed_texts
+
+
 
 
 import pandas as pd
