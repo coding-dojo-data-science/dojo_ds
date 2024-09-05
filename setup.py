@@ -74,6 +74,6 @@ setup(
     test_suite='tests',
     tests_require=load_requirements("./requirements.txt") + test_requirements,
     url='https://github.com/coding-dojo-data-science/dojo_ds',
-    version='1.1.14',
+    version='1.1.15',
     zip_safe=False,
 )
